@@ -1,0 +1,114 @@
+{
+   "app": {
+      "name": "Gamepal",
+      "tagline": "Your board game companion"
+   },
+   "common": {
+      "back": "Back",
+      "add": "Add",
+      "clear": "Clear",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "save": "Save",
+      "loading": "Loading...",
+      "comingSoon": "Coming soon"
+   },
+   "home": {
+      "modes": {
+         "randomPicker": {
+            "title": "Random Picker",
+            "description": "Choose a player randomly"
+         },
+         "dice": {
+            "title": "Dice",
+            "description": "Roll any dice combination"
+         },
+         "scores": {
+            "title": "Scores",
+            "description": "Track game scores"
+         },
+         "music": {
+            "title": "Music",
+            "description": "Ambient music for your games"
+         },
+         "rules": {
+            "title": "Rules",
+            "description": "Quick access to game rules"
+         },
+         "narrator": {
+            "title": "Narrator",
+            "description": "AI game master assistant"
+         }
+      }
+   },
+   "randomPicker": {
+      "title": "Random Picker",
+      "touch": "Touch",
+      "list": "List",
+      "touchHint": "Place your fingers on the screen",
+      "holdStill": "Hold still...",
+      "playerName": "Player name",
+      "noPlayers": "No players yet",
+      "pickRandom": "Pick random player",
+      "picking": "Picking..."
+   },
+   "dice": {
+      "title": "Dice",
+      "addDice": "Add dice",
+      "yourDice": "Your dice",
+      "total": "Total",
+      "roll": "Roll dice",
+      "rolling": "Rolling...",
+      "selectDice": "Select dice to roll"
+   },
+   "scores": {
+      "title": "Scores",
+      "new": "New",
+      "noSessions": "No score sessions yet",
+      "createFirst": "Create your first session",
+      "players": "players",
+      "round": "Round",
+      "deleteConfirm": "Delete session \"{name}\"?",
+      "newSession": {
+         "title": "New Session",
+         "sessionName": "Session name",
+         "sessionNamePlaceholder": "Game night, Tournament...",
+         "players": "Players",
+         "playerPlaceholder": "Player {n}",
+         "addPlayer": "+ Add player",
+         "gameMode": "Game mode",
+         "individual": "Individual",
+         "teams": "Teams",
+         "endCondition": "End condition (optional)",
+         "maxRounds": "Max rounds",
+         "targetScore": "Target score",
+         "create": "Create session",
+         "useSavedPlayers": "Use players from your last game?",
+         "yes": "Yes",
+         "no": "No"
+      },
+      "session": {
+         "leaderboard": "Leaderboard",
+         "gameOver": "Game Over",
+         "winner": "Winner: {name}",
+         "nextRound": "Next round"
+      }
+   },
+   "settings": {
+      "title": "Settings",
+      "appearance": "Appearance",
+      "theme": "Theme",
+      "themeDescription": "Choose your preferred color scheme",
+      "dark": "Dark",
+      "light": "Light",
+      "language": "Language",
+      "languageDescription": "Choose your language",
+      "dyslexiaMode": "Dyslexia mode",
+      "dyslexiaDescription": "Increase letter spacing for readability",
+      "data": "Data",
+      "clearData": "Clear all data",
+      "clearDataDescription": "Delete all saved sessions and preferences",
+      "clearDataConfirm": "Delete all local data? This cannot be undone.",
+      "version": "Gamepal v1.0.0"
+   }
+}

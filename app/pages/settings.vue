@@ -1,10 +1,22 @@
 <script setup lang="ts">
+const { t, locale, locales } = useI18n()
 const { theme, setTheme } = useTheme()
 
 const isDyslexiaMode = ref(false)
 
+const availableLocales = computed(() => {
+   return (locales.value as Array<{ code: string; name: string }>).map(l => ({
+      code: l.code,
+      name: l.name,
+   }))
+})
+
+function setLocale(code: string): void {
+   locale.value = code
+}
+
 function handleClearData(): void {
-   if (confirm('Delete all local data? This cannot be undone.')) {
+   if (confirm(t('settings.clearDataConfirm'))) {
       if (import.meta.client) {
          localStorage.clear()
          window.location.reload()
@@ -40,17 +52,17 @@ onMounted(() => {
          <NuxtLink to="/" class="settings-page__back">
             <span>←</span>
          </NuxtLink>
-         <h1 class="heading">Settings</h1>
+         <h1 class="heading">{{ t('settings.title') }}</h1>
       </header>
 
       <div class="settings-page__content">
          <section class="settings-section">
-            <h2 class="settings-section__title">Appearance</h2>
+            <h2 class="settings-section__title">{{ t('settings.appearance') }}</h2>
 
             <div class="setting-item card-game">
                <div class="setting-item__info">
-                  <span class="setting-item__label">Theme</span>
-                  <span class="setting-item__description">Choose your preferred color scheme</span>
+                  <span class="setting-item__label">{{ t('settings.theme') }}</span>
+                  <span class="setting-item__description">{{ t('settings.themeDescription') }}</span>
                </div>
                <div class="theme-toggle">
                   <button
@@ -58,22 +70,40 @@ onMounted(() => {
                      :class="{ 'theme-toggle__btn--active': theme === 'dark' }"
                      @click="setTheme('dark')"
                   >
-                     Dark
+                     {{ t('settings.dark') }}
                   </button>
                   <button
                      class="theme-toggle__btn"
                      :class="{ 'theme-toggle__btn--active': theme === 'light' }"
                      @click="setTheme('light')"
                   >
-                     Light
+                     {{ t('settings.light') }}
                   </button>
                </div>
             </div>
 
             <div class="setting-item card-game">
                <div class="setting-item__info">
-                  <span class="setting-item__label">Dyslexia mode</span>
-                  <span class="setting-item__description">Increase letter spacing for readability</span>
+                  <span class="setting-item__label">{{ t('settings.language') }}</span>
+                  <span class="setting-item__description">{{ t('settings.languageDescription') }}</span>
+               </div>
+               <div class="locale-toggle">
+                  <button
+                     v-for="loc in availableLocales"
+                     :key="loc.code"
+                     class="locale-toggle__btn"
+                     :class="{ 'locale-toggle__btn--active': locale === loc.code }"
+                     @click="setLocale(loc.code)"
+                  >
+                     {{ loc.name }}
+                  </button>
+               </div>
+            </div>
+
+            <div class="setting-item card-game">
+               <div class="setting-item__info">
+                  <span class="setting-item__label">{{ t('settings.dyslexiaMode') }}</span>
+                  <span class="setting-item__description">{{ t('settings.dyslexiaDescription') }}</span>
                </div>
                <button
                   class="toggle-switch"
@@ -86,18 +116,18 @@ onMounted(() => {
          </section>
 
          <section class="settings-section">
-            <h2 class="settings-section__title">Data</h2>
+            <h2 class="settings-section__title">{{ t('settings.data') }}</h2>
 
             <button class="setting-item setting-item--danger card-game" @click="handleClearData">
                <div class="setting-item__info">
-                  <span class="setting-item__label">Clear all data</span>
-                  <span class="setting-item__description">Delete all saved sessions and preferences</span>
+                  <span class="setting-item__label">{{ t('settings.clearData') }}</span>
+                  <span class="setting-item__description">{{ t('settings.clearDataDescription') }}</span>
                </div>
             </button>
          </section>
 
          <footer class="settings-page__footer">
-            <p>Gamepal v1.0.0</p>
+            <p>{{ t('settings.version') }}</p>
          </footer>
       </div>
    </div>
@@ -181,12 +211,14 @@ onMounted(() => {
    color: var(--text-secondary);
 }
 
-.theme-toggle {
+.theme-toggle,
+.locale-toggle {
    display: flex;
    gap: var(--gap-xs);
 }
 
-.theme-toggle__btn {
+.theme-toggle__btn,
+.locale-toggle__btn {
    padding: var(--gap-xs) var(--gap-md);
    border-radius: var(--radius-sm);
    font-size: var(--text-sm);
@@ -194,7 +226,8 @@ onMounted(() => {
    transition: all var(--transition-fast);
 }
 
-.theme-toggle__btn--active {
+.theme-toggle__btn--active,
+.locale-toggle__btn--active {
    background: var(--accent-primary);
    color: #ffffff;
 }

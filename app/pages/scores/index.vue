@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 const { sessions, isLoaded, deleteSession } = useScoreSessions()
 
 function formatDate(dateString: string): string {
@@ -12,7 +13,7 @@ function formatDate(dateString: string): string {
 }
 
 function confirmDelete(id: string, name: string): void {
-   if (confirm(`Delete session "${name}"?`)) {
+   if (confirm(t('scores.deleteConfirm', { name }))) {
       deleteSession(id)
    }
 }
@@ -24,8 +25,8 @@ function confirmDelete(id: string, name: string): void {
          <NuxtLink to="/" class="scores-page__back">
             <span>←</span>
          </NuxtLink>
-         <h1 class="heading">Scores</h1>
-         <NuxtLink to="/scores/new" class="btn-primary scores-page__new">New</NuxtLink>
+         <h1 class="heading">{{ t('scores.title') }}</h1>
+         <NuxtLink to="/scores/new" class="btn-primary scores-page__new">{{ t('scores.new') }}</NuxtLink>
       </header>
 
       <div class="scores-page__content">
@@ -36,7 +37,7 @@ function confirmDelete(id: string, name: string): void {
                      <div class="session-item__info">
                         <h2 class="session-item__name">{{ session.name }}</h2>
                         <p class="session-item__meta">
-                           {{ session.players.length }} players · Round {{ session.currentRound }}
+                           {{ session.players.length }} {{ t('scores.players') }} · {{ t('scores.round') }} {{ session.currentRound }}
                         </p>
                         <p class="session-item__date">{{ formatDate(session.updatedAt) }}</p>
                      </div>
@@ -48,12 +49,12 @@ function confirmDelete(id: string, name: string): void {
             </ul>
 
             <div v-else class="scores-page__empty">
-               <p>No score sessions yet</p>
-               <NuxtLink to="/scores/new" class="btn-primary">Create your first session</NuxtLink>
+               <p>{{ t('scores.noSessions') }}</p>
+               <NuxtLink to="/scores/new" class="btn-primary">{{ t('scores.createFirst') }}</NuxtLink>
             </div>
          </template>
 
-         <p v-else class="scores-page__loading">Loading...</p>
+         <p v-else class="scores-page__loading">{{ t('common.loading') }}</p>
       </div>
    </div>
 </template>

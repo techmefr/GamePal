@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const { getSession, updatePlayerScore, addRound, sessions } = useScoreSessions()
@@ -62,19 +63,19 @@ onMounted(() => {
          <NuxtLink to="/scores" class="session-page__back">
             <span>←</span>
          </NuxtLink>
-         <h1 class="heading">{{ session?.name ?? 'Session' }}</h1>
+         <h1 class="heading">{{ session?.name ?? '' }}</h1>
       </header>
 
       <div v-if="session" class="session-page__content">
          <div v-if="isGameOver" class="game-over-banner card-game">
-            <h2 class="heading">Game Over</h2>
+            <h2 class="heading">{{ t('scores.session.gameOver') }}</h2>
             <p class="game-over-banner__winner">
-               Winner: {{ sortedPlayers[0]?.name }}
+               {{ t('scores.session.winner', { name: sortedPlayers[0]?.name }) }}
             </p>
          </div>
 
          <div class="leaderboard">
-            <h2 class="section-title">Leaderboard</h2>
+            <h2 class="section-title">{{ t('scores.session.leaderboard') }}</h2>
             <ul class="leaderboard__list">
                <li
                   v-for="(player, index) in sortedPlayers"
@@ -90,7 +91,7 @@ onMounted(() => {
          </div>
 
          <div class="score-table">
-            <h2 class="section-title">Round {{ session.currentRound }}</h2>
+            <h2 class="section-title">{{ t('scores.round') }} {{ session.currentRound }}</h2>
             <div class="score-table__grid">
                <div v-for="player in session.players" :key="player.id" class="score-row card-game">
                   <span class="score-row__name">{{ player.name }}</span>
@@ -120,12 +121,12 @@ onMounted(() => {
          </div>
 
          <button v-if="!isGameOver" class="btn-primary session-page__next-round" @click="handleAddRound">
-            Next round
+            {{ t('scores.session.nextRound') }}
          </button>
       </div>
 
       <div v-else class="session-page__loading">
-         <p>Loading session...</p>
+         <p>{{ t('common.loading') }}</p>
       </div>
    </div>
 </template>

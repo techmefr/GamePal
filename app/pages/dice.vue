@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { IDie } from '~/types'
 
+const { t } = useI18n()
+
 const DICE_TYPES = [3, 4, 6, 8, 10, 12, 20, 100]
 
 const dice = ref<IDie[]>([])
@@ -58,13 +60,15 @@ function getDieLabel(type: number): string {
          <NuxtLink to="/" class="dice-page__back">
             <span>←</span>
          </NuxtLink>
-         <h1 class="heading">Dice</h1>
-         <button v-if="dice.length > 0" class="dice-page__clear" @click="clearDice">Clear</button>
+         <h1 class="heading">{{ t('dice.title') }}</h1>
+         <button v-if="dice.length > 0" class="dice-page__clear" @click="clearDice">
+            {{ t('common.clear') }}
+         </button>
       </header>
 
       <div class="dice-page__content">
          <section class="dice-catalog">
-            <h2 class="dice-catalog__title">Add dice</h2>
+            <h2 class="dice-catalog__title">{{ t('dice.addDice') }}</h2>
             <div class="dice-catalog__grid">
                <button
                   v-for="type in DICE_TYPES"
@@ -78,7 +82,7 @@ function getDieLabel(type: number): string {
          </section>
 
          <section v-if="dice.length > 0" class="dice-tray">
-            <h2 class="dice-tray__title">Your dice</h2>
+            <h2 class="dice-tray__title">{{ t('dice.yourDice') }}</h2>
             <div class="dice-tray__grid">
                <div
                   v-for="die in dice"
@@ -93,16 +97,16 @@ function getDieLabel(type: number): string {
             </div>
 
             <div class="dice-tray__total">
-               <span class="dice-tray__total-label">Total</span>
+               <span class="dice-tray__total-label">{{ t('dice.total') }}</span>
                <span class="dice-tray__total-value score">{{ totalResult }}</span>
             </div>
 
             <button class="btn-primary dice-tray__roll-btn" :disabled="isRolling" @click="rollDice">
-               {{ isRolling ? 'Rolling...' : 'Roll dice' }}
+               {{ isRolling ? t('dice.rolling') : t('dice.roll') }}
             </button>
          </section>
 
-         <p v-else class="dice-page__empty">Select dice to roll</p>
+         <p v-else class="dice-page__empty">{{ t('dice.selectDice') }}</p>
       </div>
    </div>
 </template>

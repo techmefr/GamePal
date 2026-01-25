@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { IPlayer, ITouchPoint } from '~/types'
 
+const { t } = useI18n()
+
 type PickerMode = 'touch' | 'list'
 
 const mode = ref<PickerMode>('touch')
@@ -151,21 +153,21 @@ onUnmounted(() => {
          <NuxtLink to="/" class="picker__back">
             <span>←</span>
          </NuxtLink>
-         <h1 class="heading">Random Picker</h1>
+         <h1 class="heading">{{ t('randomPicker.title') }}</h1>
          <div class="picker__mode-switch">
             <button
                class="picker__mode-btn"
                :class="{ 'picker__mode-btn--active': mode === 'touch' }"
                @click="switchMode('touch')"
             >
-               Touch
+               {{ t('randomPicker.touch') }}
             </button>
             <button
                class="picker__mode-btn"
                :class="{ 'picker__mode-btn--active': mode === 'list' }"
                @click="switchMode('list')"
             >
-               List
+               {{ t('randomPicker.list') }}
             </button>
          </div>
       </header>
@@ -179,7 +181,7 @@ onUnmounted(() => {
             @touchcancel="handleTouchEnd"
          >
             <p v-if="touchPoints.length === 0" class="touch-area__hint">
-               Place your fingers on the screen
+               {{ t('randomPicker.touchHint') }}
             </p>
 
             <div
@@ -199,7 +201,7 @@ onUnmounted(() => {
          </div>
 
          <p v-if="touchPoints.length >= MIN_POINTS_FOR_SELECTION && !isSelecting" class="touch-zone__status">
-            Hold still...
+            {{ t('randomPicker.holdStill') }}
          </p>
       </div>
 
@@ -209,10 +211,10 @@ onUnmounted(() => {
                v-model="newPlayerName"
                type="text"
                class="list-zone__input"
-               placeholder="Player name"
+               :placeholder="t('randomPicker.playerName')"
                @keyup.enter="addPlayer"
             />
-            <button class="btn-primary" @click="addPlayer">Add</button>
+            <button class="btn-primary" @click="addPlayer">{{ t('common.add') }}</button>
          </div>
 
          <ul v-if="players.length > 0" class="player-list">
@@ -227,7 +229,7 @@ onUnmounted(() => {
             </li>
          </ul>
 
-         <p v-else class="list-zone__empty">No players yet</p>
+         <p v-else class="list-zone__empty">{{ t('randomPicker.noPlayers') }}</p>
 
          <button
             v-if="players.length >= 2"
@@ -235,7 +237,7 @@ onUnmounted(() => {
             :disabled="isListSelecting"
             @click="pickRandomPlayer"
          >
-            {{ isListSelecting ? 'Picking...' : 'Pick random player' }}
+            {{ isListSelecting ? t('randomPicker.picking') : t('randomPicker.pickRandom') }}
          </button>
 
          <div v-if="selectedPlayer && !isListSelecting" class="list-zone__result">

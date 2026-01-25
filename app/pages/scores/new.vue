@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IPlayer } from '~/types'
 
+const { t } = useI18n()
 const router = useRouter()
 const { data: savedPlayers } = useLocalStorage<IPlayer[]>('gamepal-players', [])
 const { createSession } = useScoreSessions()
@@ -64,37 +65,39 @@ onMounted(() => {
          <NuxtLink to="/scores" class="new-session__back">
             <span>←</span>
          </NuxtLink>
-         <h1 class="heading">New Session</h1>
+         <h1 class="heading">{{ t('scores.newSession.title') }}</h1>
       </header>
 
       <div class="new-session__content">
          <div v-if="showSavedPlayers" class="saved-players-banner card-game">
-            <p>Use players from your last game?</p>
+            <p>{{ t('scores.newSession.useSavedPlayers') }}</p>
             <div class="saved-players-banner__actions">
-               <button class="btn-primary" @click="useSavedPlayers">Yes</button>
-               <button class="saved-players-banner__dismiss" @click="showSavedPlayers = false">No</button>
+               <button class="btn-primary" @click="useSavedPlayers">{{ t('scores.newSession.yes') }}</button>
+               <button class="saved-players-banner__dismiss" @click="showSavedPlayers = false">
+                  {{ t('scores.newSession.no') }}
+               </button>
             </div>
          </div>
 
          <div class="form-group">
-            <label class="form-label">Session name</label>
+            <label class="form-label">{{ t('scores.newSession.sessionName') }}</label>
             <input
                v-model="sessionName"
                type="text"
                class="form-input"
-               placeholder="Game night, Tournament..."
+               :placeholder="t('scores.newSession.sessionNamePlaceholder')"
             />
          </div>
 
          <div class="form-group">
-            <label class="form-label">Players</label>
+            <label class="form-label">{{ t('scores.newSession.players') }}</label>
             <div class="player-fields">
                <div v-for="(_, index) in playerNames" :key="index" class="player-field">
                   <input
                      v-model="playerNames[index]"
                      type="text"
                      class="form-input"
-                     :placeholder="`Player ${index + 1}`"
+                     :placeholder="t('scores.newSession.playerPlaceholder', { n: index + 1 })"
                   />
                   <button
                      v-if="playerNames.length > 2"
@@ -105,34 +108,34 @@ onMounted(() => {
                   </button>
                </div>
             </div>
-            <button class="add-player-btn" @click="addPlayerField">+ Add player</button>
+            <button class="add-player-btn" @click="addPlayerField">{{ t('scores.newSession.addPlayer') }}</button>
          </div>
 
          <div class="form-group">
-            <label class="form-label">Game mode</label>
+            <label class="form-label">{{ t('scores.newSession.gameMode') }}</label>
             <div class="toggle-group">
                <button
                   class="toggle-btn"
                   :class="{ 'toggle-btn--active': !isTeamMode }"
                   @click="isTeamMode = false"
                >
-                  Individual
+                  {{ t('scores.newSession.individual') }}
                </button>
                <button
                   class="toggle-btn"
                   :class="{ 'toggle-btn--active': isTeamMode }"
                   @click="isTeamMode = true"
                >
-                  Teams
+                  {{ t('scores.newSession.teams') }}
                </button>
             </div>
          </div>
 
          <div class="form-group">
-            <label class="form-label">End condition (optional)</label>
+            <label class="form-label">{{ t('scores.newSession.endCondition') }}</label>
             <div class="end-condition">
                <div class="end-condition__field">
-                  <span>Max rounds</span>
+                  <span>{{ t('scores.newSession.maxRounds') }}</span>
                   <input
                      v-model.number="maxRounds"
                      type="number"
@@ -142,7 +145,7 @@ onMounted(() => {
                   />
                </div>
                <div class="end-condition__field">
-                  <span>Target score</span>
+                  <span>{{ t('scores.newSession.targetScore') }}</span>
                   <input
                      v-model.number="maxScore"
                      type="number"
@@ -155,7 +158,7 @@ onMounted(() => {
          </div>
 
          <button class="btn-primary new-session__create" :disabled="!canCreate" @click="handleCreate">
-            Create session
+            {{ t('scores.newSession.create') }}
          </button>
       </div>
    </div>

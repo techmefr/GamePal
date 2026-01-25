@@ -3,7 +3,23 @@ export default defineNuxtConfig({
 
    devtools: { enabled: true },
 
-   modules: ['@nuxt/eslint'],
+   modules: ['@nuxt/eslint', '@nuxtjs/i18n'],
+
+   i18n: {
+      locales: [
+         { code: 'en', file: 'en.json', name: 'English' },
+         { code: 'fr', file: 'fr.json', name: 'Francais' },
+      ],
+      defaultLocale: 'en',
+      lazy: true,
+      langDir: 'locales',
+      strategy: 'no_prefix',
+      detectBrowserLanguage: {
+         useCookie: true,
+         cookieKey: 'gamepal-locale',
+         fallbackLocale: 'en',
+      },
+   },
 
    css: [
       '@fontsource/lexend/400.css',

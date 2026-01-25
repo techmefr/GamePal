@@ -1,8 +1,10 @@
 <script setup lang="ts">
+const { t } = useI18n()
+
 interface IMode {
    id: string
-   title: string
-   description: string
+   titleKey: string
+   descriptionKey: string
    icon: string
    route: string
    isAvailable: boolean
@@ -11,48 +13,48 @@ interface IMode {
 const modes: IMode[] = [
    {
       id: 'random-picker',
-      title: 'Random Picker',
-      description: 'Choose a player randomly',
+      titleKey: 'home.modes.randomPicker.title',
+      descriptionKey: 'home.modes.randomPicker.description',
       icon: 'hand',
       route: '/random-picker',
       isAvailable: true,
    },
    {
       id: 'dice',
-      title: 'Dice',
-      description: 'Roll any dice combination',
+      titleKey: 'home.modes.dice.title',
+      descriptionKey: 'home.modes.dice.description',
       icon: 'dice',
       route: '/dice',
       isAvailable: true,
    },
    {
       id: 'scores',
-      title: 'Scores',
-      description: 'Track game scores',
+      titleKey: 'home.modes.scores.title',
+      descriptionKey: 'home.modes.scores.description',
       icon: 'trophy',
       route: '/scores',
       isAvailable: true,
    },
    {
       id: 'music',
-      title: 'Music',
-      description: 'Ambient music for your games',
+      titleKey: 'home.modes.music.title',
+      descriptionKey: 'home.modes.music.description',
       icon: 'music',
       route: '/music',
       isAvailable: false,
    },
    {
       id: 'rules',
-      title: 'Rules',
-      description: 'Quick access to game rules',
+      titleKey: 'home.modes.rules.title',
+      descriptionKey: 'home.modes.rules.description',
       icon: 'book',
       route: '/rules',
       isAvailable: false,
    },
    {
       id: 'narrator',
-      title: 'Narrator',
-      description: 'AI game master assistant',
+      titleKey: 'home.modes.narrator.title',
+      descriptionKey: 'home.modes.narrator.description',
       icon: 'mic',
       route: '/narrator',
       isAvailable: false,
@@ -66,8 +68,8 @@ const modes: IMode[] = [
          <NuxtLink to="/settings" class="home__settings">
             <span>⚙</span>
          </NuxtLink>
-         <h1 class="heading">Gamepal</h1>
-         <p class="home__subtitle">Your board game companion</p>
+         <h1 class="heading">{{ t('app.name') }}</h1>
+         <p class="home__subtitle">{{ t('app.tagline') }}</p>
       </header>
 
       <nav class="home__grid">
@@ -81,9 +83,9 @@ const modes: IMode[] = [
             <div class="mode-card__icon">
                <span>{{ mode.icon }}</span>
             </div>
-            <h2 class="mode-card__title">{{ mode.title }}</h2>
-            <p class="mode-card__description">{{ mode.description }}</p>
-            <span v-if="!mode.isAvailable" class="mode-card__badge">Coming soon</span>
+            <h2 class="mode-card__title">{{ t(mode.titleKey) }}</h2>
+            <p class="mode-card__description">{{ t(mode.descriptionKey) }}</p>
+            <span v-if="!mode.isAvailable" class="mode-card__badge">{{ t('common.comingSoon') }}</span>
          </NuxtLink>
       </nav>
    </div>
