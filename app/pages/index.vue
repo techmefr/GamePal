@@ -63,6 +63,9 @@ const modes: IMode[] = [
 <template>
    <div class="home">
       <header class="home__header">
+         <NuxtLink to="/settings" class="home__settings">
+            <span>⚙</span>
+         </NuxtLink>
          <h1 class="heading">Gamepal</h1>
          <p class="home__subtitle">Your board game companion</p>
       </header>
@@ -98,6 +101,16 @@ const modes: IMode[] = [
 .home__header {
    text-align: center;
    padding: var(--gap-lg) 0;
+   position: relative;
+}
+
+.home__settings {
+   position: absolute;
+   top: var(--gap-md);
+   right: 0;
+   font-size: var(--text-lg);
+   color: var(--text-secondary);
+   padding: var(--gap-xs);
 }
 
 .home__header .heading {
