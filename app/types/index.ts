@@ -27,6 +27,25 @@ export interface IDie {
    value: number | null
 }
 
+export interface ICustomDieFace {
+   value: string
+   color: string | null
+}
+
+export interface ICustomDie {
+   id: string
+   name: string
+   faces: ICustomDieFace[]
+   currentFaceIndex: number | null
+}
+
+export interface IDicePreset {
+   id: string
+   name: string
+   standardDice: { type: number; count: number }[]
+   customDice: ICustomDie[]
+}
+
 export interface IScorePlayer {
    id: string
    name: string
