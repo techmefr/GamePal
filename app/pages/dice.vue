@@ -5,6 +5,11 @@ const { t } = useI18n()
 
 const DICE_TYPES = [3, 4, 6, 8, 10, 12, 20, 100]
 const FACE_COLORS = ['#818cf8', '#f472b6', '#34d399', '#fbbf24', '#f87171', '#60a5fa', '#a78bfa', '#fb923c']
+const FACE_EMOJIS = [
+   '1', '2', '3', '4', '5', '6',
+   '+', '-', '?', '!', 'X', 'O',
+   '★', '●', '◆', '▲', '■', '♠', '♥', '♦', '♣'
+]
 
 type ViewMode = 'roll' | 'presets' | 'createCustom' | 'createPreset'
 
@@ -119,6 +124,10 @@ function removeFaceFromCustomDie(index: number): void {
 
 function setFaceColor(index: number, color: string | null): void {
    newCustomDie.value.faces[index].color = color
+}
+
+function setFaceEmoji(index: number, emoji: string): void {
+   newCustomDie.value.faces[index].value = emoji
 }
 
 function saveCustomDie(): void {
@@ -488,12 +497,32 @@ function cancelForm(): void {
                <label class="form-label">{{ t('dice.faces') }} ({{ newCustomDie.faces.length }})</label>
                <div class="faces-list">
                   <div v-for="(face, index) in newCustomDie.faces" :key="index" class="face-item">
-                     <input
-                        v-model="face.value"
-                        type="text"
-                        class="form-input face-item__input"
-                        :placeholder="t('dice.faceValue')"
-                     />
+                     <div class="face-item__main">
+                        <input
+                           v-model="face.value"
+                           type="text"
+                           class="form-input face-item__input"
+                           :placeholder="t('dice.faceValue')"
+                        />
+                        <button
+                           v-if="newCustomDie.faces.length > 2"
+                           class="face-item__remove"
+                           @click="removeFaceFromCustomDie(index)"
+                        >
+                           ×
+                        </button>
+                     </div>
+                     <div class="face-item__emojis">
+                        <button
+                           v-for="emoji in FACE_EMOJIS"
+                           :key="emoji"
+                           class="face-item__emoji"
+                           :class="{ 'face-item__emoji--active': face.value === emoji }"
+                           @click="setFaceEmoji(index, emoji)"
+                        >
+                           {{ emoji }}
+                        </button>
+                     </div>
                      <div class="face-item__colors">
                         <button
                            v-for="color in FACE_COLORS"
@@ -504,13 +533,6 @@ function cancelForm(): void {
                            @click="setFaceColor(index, face.color === color ? null : color)"
                         ></button>
                      </div>
-                     <button
-                        v-if="newCustomDie.faces.length > 2"
-                        class="face-item__remove"
-                        @click="removeFaceFromCustomDie(index)"
-                     >
-                        ×
-                     </button>
                   </div>
                </div>
                <button class="add-face-btn" @click="addFaceToCustomDie">
@@ -971,20 +993,57 @@ function cancelForm(): void {
 
 .face-item {
    display: flex;
-   align-items: center;
+   flex-direction: column;
    gap: var(--gap-sm);
    padding: var(--gap-sm);
    background: var(--surface);
    border-radius: var(--radius-sm);
 }
 
+.face-item__main {
+   display: flex;
+   align-items: center;
+   gap: var(--gap-sm);
+}
+
 .face-item__input {
    flex: 1;
    min-width: 0;
+   font-size: var(--text-lg);
+   text-align: center;
+}
+
+.face-item__emojis {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 4px;
+}
+
+.face-item__emoji {
+   width: 32px;
+   height: 32px;
+   border-radius: var(--radius-xs);
+   background: var(--bg-secondary);
+   font-size: var(--text-base);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   transition: all var(--transition-fast);
+}
+
+.face-item__emoji:hover {
+   background: var(--accent-primary);
+   color: #ffffff;
+}
+
+.face-item__emoji--active {
+   background: var(--accent-primary);
+   color: #ffffff;
 }
 
 .face-item__colors {
    display: flex;
+   flex-wrap: wrap;
    gap: 4px;
 }
 
