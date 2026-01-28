@@ -1,0 +1,1 @@
+function e(){return Math.random().toString(36).substring(2,11)}function f(t){if(t.length===0)return null;const n=Math.floor(Math.random()*t.length);return t[n]}function s(t){const n=[...t];for(let o=n.length-1;o>0;o--){const r=Math.floor(Math.random()*(o+1));[n[o],n[r]]=[n[r],n[o]]}return n}export{e as g,f as p,s};
