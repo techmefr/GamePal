@@ -97,7 +97,25 @@ describe('Random Picker Page', () => {
       expect(players.length).toBe(1)
    })
 
-   it('should not show pick button with less than 2 players', async () => {
+   it('should show draw mode buttons in list mode', async () => {
+      const wrapper = await mountSuspended(RandomPickerPage)
+      const listModeBtn = wrapper.findAll('.picker__mode-btn')[1]
+      await listModeBtn.trigger('click')
+
+      const drawModeButtons = wrapper.findAll('.draw-mode-btn')
+      expect(drawModeButtons.length).toBe(2)
+   })
+
+   it('should have player mode active by default', async () => {
+      const wrapper = await mountSuspended(RandomPickerPage)
+      const listModeBtn = wrapper.findAll('.picker__mode-btn')[1]
+      await listModeBtn.trigger('click')
+
+      const activeDrawBtn = wrapper.find('.draw-mode-btn--active')
+      expect(activeDrawBtn.exists()).toBe(true)
+   })
+
+   it('should show toolbar when players exist', async () => {
       const wrapper = await mountSuspended(RandomPickerPage)
       const listModeBtn = wrapper.findAll('.picker__mode-btn')[1]
       await listModeBtn.trigger('click')
@@ -106,11 +124,69 @@ describe('Random Picker Page', () => {
       await input.setValue('Alice')
       await wrapper.find('.btn-primary').trigger('click')
 
-      const pickBtn = wrapper.find('.list-zone__pick-btn')
-      expect(pickBtn.exists()).toBe(false)
+      const toolbar = wrapper.find('.list-zone__toolbar')
+      expect(toolbar.exists()).toBe(true)
    })
 
-   it('should show pick button with 2+ players', async () => {
+   it('should have player toggle checkbox', async () => {
+      const wrapper = await mountSuspended(RandomPickerPage)
+      const listModeBtn = wrapper.findAll('.picker__mode-btn')[1]
+      await listModeBtn.trigger('click')
+
+      const input = wrapper.find('.list-zone__input')
+      await input.setValue('Alice')
+      await wrapper.find('.btn-primary').trigger('click')
+
+      const toggle = wrapper.find('.player-list__toggle')
+      expect(toggle.exists()).toBe(true)
+   })
+
+   it('should toggle player active state', async () => {
+      const wrapper = await mountSuspended(RandomPickerPage)
+      const listModeBtn = wrapper.findAll('.picker__mode-btn')[1]
+      await listModeBtn.trigger('click')
+
+      const input = wrapper.find('.list-zone__input')
+      await input.setValue('Alice')
+      await wrapper.find('.btn-primary').trigger('click')
+
+      const toggle = wrapper.find('.player-list__toggle')
+      expect(toggle.classes()).toContain('player-list__toggle--active')
+
+      await toggle.trigger('click')
+      expect(toggle.classes()).not.toContain('player-list__toggle--active')
+   })
+
+   it('should show team manager button', async () => {
+      const wrapper = await mountSuspended(RandomPickerPage)
+      const listModeBtn = wrapper.findAll('.picker__mode-btn')[1]
+      await listModeBtn.trigger('click')
+
+      const input = wrapper.find('.list-zone__input')
+      await input.setValue('Alice')
+      await wrapper.find('.btn-primary').trigger('click')
+
+      const teamsBtn = wrapper.find('.toolbar-btn--teams')
+      expect(teamsBtn.exists()).toBe(true)
+   })
+
+   it('should toggle team manager visibility', async () => {
+      const wrapper = await mountSuspended(RandomPickerPage)
+      const listModeBtn = wrapper.findAll('.picker__mode-btn')[1]
+      await listModeBtn.trigger('click')
+
+      const input = wrapper.find('.list-zone__input')
+      await input.setValue('Alice')
+      await wrapper.find('.btn-primary').trigger('click')
+
+      const teamsBtn = wrapper.find('.toolbar-btn--teams')
+      await teamsBtn.trigger('click')
+
+      const teamManager = wrapper.find('.team-manager')
+      expect(teamManager.exists()).toBe(true)
+   })
+
+   it('should show action buttons with 2+ players', async () => {
       const wrapper = await mountSuspended(RandomPickerPage)
       const listModeBtn = wrapper.findAll('.picker__mode-btn')[1]
       await listModeBtn.trigger('click')
@@ -124,7 +200,12 @@ describe('Random Picker Page', () => {
       await addBtn.trigger('click')
 
       const pickBtn = wrapper.find('.list-zone__pick-btn')
+      const orderBtn = wrapper.find('.list-zone__order-btn')
+      const firstBtn = wrapper.find('.list-zone__first-btn')
+
       expect(pickBtn.exists()).toBe(true)
+      expect(orderBtn.exists()).toBe(true)
+      expect(firstBtn.exists()).toBe(true)
    })
 
    it('should remove player when clicking remove button', async () => {
@@ -147,5 +228,48 @@ describe('Random Picker Page', () => {
       const wrapper = await mountSuspended(RandomPickerPage)
       const backLink = wrapper.find('.picker__back')
       expect(backLink.exists()).toBe(true)
+   })
+
+   it('should deselect all players', async () => {
+      const wrapper = await mountSuspended(RandomPickerPage)
+      const listModeBtn = wrapper.findAll('.picker__mode-btn')[1]
+      await listModeBtn.trigger('click')
+
+      const input = wrapper.find('.list-zone__input')
+      const addBtn = wrapper.find('.btn-primary')
+
+      await input.setValue('Alice')
+      await addBtn.trigger('click')
+      await input.setValue('Bob')
+      await addBtn.trigger('click')
+
+      const deselectBtn = wrapper.findAll('.toolbar-btn')[1]
+      await deselectBtn.trigger('click')
+
+      const inactiveItems = wrapper.findAll('.player-list__item--inactive')
+      expect(inactiveItems.length).toBe(2)
+   })
+
+   it('should select all players', async () => {
+      const wrapper = await mountSuspended(RandomPickerPage)
+      const listModeBtn = wrapper.findAll('.picker__mode-btn')[1]
+      await listModeBtn.trigger('click')
+
+      const input = wrapper.find('.list-zone__input')
+      const addBtn = wrapper.find('.btn-primary')
+
+      await input.setValue('Alice')
+      await addBtn.trigger('click')
+      await input.setValue('Bob')
+      await addBtn.trigger('click')
+
+      const deselectBtn = wrapper.findAll('.toolbar-btn')[1]
+      await deselectBtn.trigger('click')
+
+      const selectBtn = wrapper.findAll('.toolbar-btn')[0]
+      await selectBtn.trigger('click')
+
+      const inactiveItems = wrapper.findAll('.player-list__item--inactive')
+      expect(inactiveItems.length).toBe(0)
    })
 })

@@ -50,7 +50,21 @@
       "playerName": "Nom du joueur",
       "noPlayers": "Aucun joueur",
       "pickRandom": "Tirer au sort",
-      "picking": "Tirage..."
+      "picking": "Tirage...",
+      "drawPlayer": "Joueurs",
+      "drawTeam": "Equipes",
+      "selectAll": "Tout selectionner",
+      "deselectAll": "Tout deselectionner",
+      "manageTeams": "Equipes",
+      "teams": "Equipes",
+      "teamName": "Nom de l'equipe",
+      "unassigned": "Joueurs non assignes",
+      "assign": "Assigner",
+      "reassign": "Deplacer",
+      "noTeam": "Retirer de l'equipe",
+      "turnOrder": "Ordre de jeu",
+      "firstPlayer": "Premier joueur",
+      "turnOrderResult": "Ordre de jeu"
    },
    "dice": {
       "title": "Des",

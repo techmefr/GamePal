@@ -3,6 +3,17 @@ export interface IPlayer {
    name: string
 }
 
+export interface IPickerPlayer extends IPlayer {
+   isActive: boolean
+   teamId: string | null
+}
+
+export interface ITeam {
+   id: string
+   name: string
+   color: string
+}
+
 export interface ITouchPoint {
    id: number
    x: number
