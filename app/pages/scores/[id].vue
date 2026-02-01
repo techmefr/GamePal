@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ArrowLeft, Trophy, Minus, Plus, ChevronRight } from 'lucide-vue-next'
+
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
@@ -42,9 +44,9 @@ function getPlayerScore(playerId: string, round: number): number {
 }
 
 function getRankClass(index: number): string {
-   if (index === 0) return 'rank--first'
-   if (index === 1) return 'rank--second'
-   if (index === 2) return 'rank--third'
+   if (index === 0) return 'ring-2 ring-yellow-500/50 bg-gradient-to-br from-card to-yellow-500/10'
+   if (index === 1) return 'ring-1 ring-gray-400/30 bg-gradient-to-br from-card to-gray-400/5'
+   if (index === 2) return 'ring-1 ring-orange-600/30 bg-gradient-to-br from-card to-orange-600/5'
    return ''
 }
 
@@ -58,257 +60,132 @@ onMounted(() => {
 </script>
 
 <template>
-   <div class="session-page">
-      <header class="session-page__header">
-         <NuxtLink to="/scores" class="session-page__back">
-            <span>←</span>
-         </NuxtLink>
-         <h1 class="heading">{{ session?.name ?? '' }}</h1>
+   <div class="min-h-dvh bg-background">
+      <header class="sticky top-0 z-10 bg-card/80 backdrop-blur-lg border-b border-border">
+         <div class="flex items-center gap-4 px-4 py-4">
+            <NuxtLink
+               to="/scores"
+               class="session-page__back flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+               v-motion
+               :initial="{ opacity: 0, x: -10 }"
+               :enter="{ opacity: 1, x: 0 }"
+            >
+               <ArrowLeft class="h-5 w-5" />
+            </NuxtLink>
+            <h1
+               class="heading font-display text-lg font-bold tracking-tight truncate"
+               v-motion
+               :initial="{ opacity: 0, y: -10 }"
+               :enter="{ opacity: 1, y: 0, transition: { delay: 100 } }"
+            >
+               {{ session?.name ?? '' }}
+            </h1>
+         </div>
       </header>
 
-      <div v-if="session" class="session-page__content">
-         <div v-if="isGameOver" class="game-over-banner card-game">
-            <h2 class="heading">{{ t('scores.session.gameOver') }}</h2>
-            <p class="game-over-banner__winner">
+      <div v-if="session" class="p-4 space-y-6">
+         <UiCard
+            v-if="isGameOver"
+            class="game-over-banner p-6 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-center"
+            v-motion
+            :initial="{ opacity: 0, scale: 0.9 }"
+            :enter="{ opacity: 1, scale: 1, transition: { delay: 150 } }"
+         >
+            <Trophy class="h-10 w-10 mx-auto mb-3" />
+            <h2 class="font-display text-xl font-bold mb-1">{{ t('scores.session.gameOver') }}</h2>
+            <p class="text-primary-foreground/80">
                {{ t('scores.session.winner', { name: sortedPlayers[0]?.name }) }}
             </p>
-         </div>
+         </UiCard>
 
-         <div class="leaderboard">
-            <h2 class="section-title">{{ t('scores.session.leaderboard') }}</h2>
-            <ul class="leaderboard__list">
+         <section
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 200 } }"
+         >
+            <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+               {{ t('scores.session.leaderboard') }}
+            </h2>
+            <ul class="space-y-2">
                <li
                   v-for="(player, index) in sortedPlayers"
                   :key="player.id"
-                  class="leaderboard__item card-game"
-                  :class="getRankClass(index)"
+                  v-motion
+                  :initial="{ opacity: 0, x: -20 }"
+                  :enter="{ opacity: 1, x: 0, transition: { delay: 250 + index * 50 } }"
                >
-                  <span class="leaderboard__rank">{{ index + 1 }}</span>
-                  <span class="leaderboard__name">{{ player.name }}</span>
-                  <span class="leaderboard__score score">{{ player.total }}</span>
+                  <UiCard
+                     class="leaderboard-item flex items-center gap-3 p-3"
+                     :class="getRankClass(index)"
+                  >
+                     <span class="rank font-display text-lg font-bold text-muted-foreground w-8 text-center">
+                        {{ index + 1 }}
+                     </span>
+                     <span class="name flex-1 font-medium text-foreground">{{ player.name }}</span>
+                     <span class="score font-display text-xl font-bold text-accent">{{ player.total }}</span>
+                  </UiCard>
                </li>
             </ul>
-         </div>
+         </section>
 
-         <div class="score-table">
-            <h2 class="section-title">{{ t('scores.round') }} {{ session.currentRound }}</h2>
-            <div class="score-table__grid">
-               <div v-for="player in session.players" :key="player.id" class="score-row card-game">
-                  <span class="score-row__name">{{ player.name }}</span>
-                  <div class="score-row__input-wrapper">
+         <section
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 350 } }"
+         >
+            <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+               {{ t('scores.round') }} {{ session.currentRound }}
+            </h2>
+            <div class="space-y-2">
+               <UiCard
+                  v-for="player in session.players"
+                  :key="player.id"
+                  class="score-row flex items-center gap-3 p-3"
+               >
+                  <span class="player-name flex-1 font-medium text-foreground">{{ player.name }}</span>
+                  <div class="score-controls flex items-center gap-1">
                      <button
-                        class="score-row__btn"
+                        class="score-btn w-9 h-9 rounded-lg bg-muted text-foreground flex items-center justify-center hover:bg-muted/80 active:bg-primary active:text-primary-foreground transition-colors"
                         @click="updatePlayerScore(sessionId, player.id, session.currentRound, getPlayerScore(player.id, session.currentRound) - 1)"
                      >
-                        −
+                        <Minus class="h-4 w-4" />
                      </button>
                      <input
                         type="number"
-                        class="score-row__input"
+                        class="score-input w-14 h-9 text-center rounded-lg border border-border bg-background text-foreground font-display font-medium focus:outline-none focus:ring-2 focus:ring-primary"
                         :value="getPlayerScore(player.id, session.currentRound)"
                         @change="handleScoreChange(player.id, session.currentRound, $event)"
                      />
                      <button
-                        class="score-row__btn"
+                        class="score-btn w-9 h-9 rounded-lg bg-muted text-foreground flex items-center justify-center hover:bg-muted/80 active:bg-primary active:text-primary-foreground transition-colors"
                         @click="updatePlayerScore(sessionId, player.id, session.currentRound, getPlayerScore(player.id, session.currentRound) + 1)"
                      >
-                        +
+                        <Plus class="h-4 w-4" />
                      </button>
                   </div>
-                  <span class="score-row__total">{{ player.total }}</span>
-               </div>
+                  <span class="player-total font-display text-base font-semibold text-primary min-w-12 text-right">
+                     {{ player.total }}
+                  </span>
+               </UiCard>
             </div>
-         </div>
+         </section>
 
-         <button v-if="!isGameOver" class="btn-primary session-page__next-round" @click="handleAddRound">
+         <UiButton
+            v-if="!isGameOver"
+            class="next-round-btn w-full"
+            size="lg"
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 400 } }"
+            @click="handleAddRound"
+         >
             {{ t('scores.session.nextRound') }}
-         </button>
+            <ChevronRight class="h-5 w-5 ml-1" />
+         </UiButton>
       </div>
 
-      <div v-else class="session-page__loading">
-         <p>{{ t('common.loading') }}</p>
+      <div v-else class="flex items-center justify-center min-h-[50vh]">
+         <p class="text-muted-foreground">{{ t('common.loading') }}</p>
       </div>
    </div>
 </template>
-
-<style scoped>
-.session-page {
-   min-height: 100dvh;
-   display: flex;
-   flex-direction: column;
-}
-
-.session-page__header {
-   display: flex;
-   align-items: center;
-   gap: var(--gap-md);
-   padding: var(--gap-md);
-   background: var(--bg-secondary);
-}
-
-.session-page__back {
-   font-size: var(--text-lg);
-   color: var(--text-primary);
-   padding: var(--gap-xs);
-}
-
-.session-page__header .heading {
-   flex: 1;
-   font-size: var(--text-lg);
-}
-
-.session-page__content {
-   flex: 1;
-   padding: var(--gap-md);
-   display: flex;
-   flex-direction: column;
-   gap: var(--gap-lg);
-}
-
-.game-over-banner {
-   text-align: center;
-   background: var(--accent-primary);
-   padding: var(--gap-lg);
-}
-
-.game-over-banner .heading {
-   font-size: var(--text-xl);
-   margin-bottom: var(--gap-sm);
-}
-
-.game-over-banner__winner {
-   font-size: var(--text-lg);
-}
-
-.section-title {
-   font-size: var(--text-sm);
-   color: var(--text-secondary);
-   text-transform: uppercase;
-   letter-spacing: 0.05em;
-   margin-bottom: var(--gap-sm);
-}
-
-.leaderboard__list {
-   display: flex;
-   flex-direction: column;
-   gap: var(--gap-xs);
-}
-
-.leaderboard__item {
-   display: flex;
-   align-items: center;
-   gap: var(--gap-md);
-   padding: var(--gap-sm) var(--gap-md);
-}
-
-.leaderboard__item.rank--first {
-   background: linear-gradient(135deg, var(--surface) 0%, rgba(255, 215, 0, 0.2) 100%);
-   border-color: rgba(255, 215, 0, 0.3);
-}
-
-.leaderboard__item.rank--second {
-   background: linear-gradient(135deg, var(--surface) 0%, rgba(192, 192, 192, 0.15) 100%);
-}
-
-.leaderboard__item.rank--third {
-   background: linear-gradient(135deg, var(--surface) 0%, rgba(205, 127, 50, 0.15) 100%);
-}
-
-.leaderboard__rank {
-   font-family: var(--font-display);
-   font-size: var(--text-lg);
-   font-weight: 700;
-   color: var(--text-secondary);
-   width: 30px;
-   text-align: center;
-}
-
-.leaderboard__name {
-   flex: 1;
-   font-size: var(--text-base);
-}
-
-.leaderboard__score {
-   font-size: var(--text-lg);
-}
-
-.score-table__grid {
-   display: flex;
-   flex-direction: column;
-   gap: var(--gap-sm);
-}
-
-.score-row {
-   display: flex;
-   align-items: center;
-   gap: var(--gap-md);
-   padding: var(--gap-sm) var(--gap-md);
-}
-
-.score-row__name {
-   flex: 1;
-   font-size: var(--text-base);
-}
-
-.score-row__input-wrapper {
-   display: flex;
-   align-items: center;
-   gap: var(--gap-xs);
-}
-
-.score-row__btn {
-   width: 36px;
-   height: 36px;
-   border-radius: var(--radius-sm);
-   background: var(--surface-hover);
-   color: var(--text-primary);
-   font-size: var(--text-lg);
-   font-weight: 600;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-}
-
-.score-row__btn:active {
-   background: var(--accent-primary);
-}
-
-.score-row__input {
-   width: 60px;
-   text-align: center;
-   padding: var(--gap-xs);
-   border-radius: var(--radius-sm);
-   border: var(--border);
-   background: var(--surface);
-   color: var(--text-primary);
-   font-family: var(--font-display);
-   font-size: var(--text-base);
-}
-
-.score-row__input:focus {
-   outline: 2px solid var(--accent-primary);
-   outline-offset: 2px;
-}
-
-.score-row__total {
-   font-family: var(--font-display);
-   font-size: var(--text-base);
-   color: var(--accent-primary);
-   min-width: 50px;
-   text-align: right;
-}
-
-.session-page__next-round {
-   margin-top: auto;
-   width: 100%;
-   justify-content: center;
-}
-
-.session-page__loading {
-   flex: 1;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   color: var(--text-secondary);
-}
-</style>

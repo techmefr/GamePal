@@ -55,172 +55,67 @@ npm run preview
 
 ---
 
-## Roadmap complète
+## Roadmap
 
-Cette roadmap sert de backlog produit et technique.
-Chaque story peut être développée indépendamment.
-Les cases peuvent être cochées par un développeur humain ou un agent IA.
+Chaque story correspond à un fichier détaillé dans `/backlog`.
 
-### Players & Sessions
+### Players & Sessions (`/backlog/players.md`)
 
-#### Story : Gestion des joueurs
-Créer, modifier, supprimer les joueurs.
+- [ ] Gestion des joueurs (CRUD, UI, persistance)
+- [ ] Gestion des sessions (création, chargement, historique)
+- [ ] Gestion des équipes (création, assignation, réutilisation)
 
-- [ ] PlayerCard (nom, couleur, avatar)
-- [ ] PlayerForm (ajout / édition)
-- [ ] Store players
-- [ ] Validation
-- [ ] Suppression
-- [ ] Responsive
+### Dice (`/backlog/dice.md`)
 
-#### Story : Sessions
-Créer et gérer des sessions.
+- [ ] Table de dés (DiceCard, lancer, animation, blocage)
+- [ ] Catalogue de dés (liste, panier, ajout multiples)
+- [ ] Créateur de dés personnalisés (faces, couleurs, icônes, export JSON/QR)
 
-- [ ] Store sessions
-- [ ] Création / renommage
-- [ ] Ajout / retrait joueurs
-- [ ] Sauvegarde / chargement
-- [ ] Historique
+### Time (`/backlog/time.md`)
 
-#### Story : Équipes
+- [ ] Timer simple (start, stop, reset)
+- [ ] Chrono face à face (écran divisé, tap switch)
+- [ ] Mode 4 joueurs (écran en 4, tap individuel)
+- [ ] Sablier (animation, rotation téléphone)
+- [ ] Marketplace timers (presets par jeu, import/export)
 
-- [ ] Création équipes
-- [ ] Assignation joueurs
-- [ ] Sauvegarde
-- [ ] Réutilisation
+### Score (`/backlog/score.md`)
 
-### Dice
+- [ ] Notation par manche (saisie, total, affichage)
+- [ ] Clôture de partie (bouton clôture, export JSON)
 
-#### Story : Table de dés
+### Home (`/backlog/home.md`)
 
-- [ ] DiceCard
-- [ ] Animation MVP
-- [ ] Bouton lancer
-- [ ] Blocage
-- [ ] Swipe / shake
+- [ ] Choix du jeu (recherche, filtre, sélection)
+- [ ] Chargement automatique (dés, temps, score, audio)
+- [ ] Configuration manuelle (modification, sauvegarde)
 
-#### Story : Catalogue
+### Audio (`/backlog/audio.md`)
 
-- [ ] Liste dés
-- [ ] Panier
-- [ ] Ajout à table
+- [ ] Playlists (musiques libres, YouTube embed, partage)
+- [ ] Soundboard (sons rapides, volume individuel, multi-touch)
 
-#### Story : Créateur
+### Rules (`/backlog/rules.md`)
 
-- [ ] Éditeur faces
-- [ ] Nom / jeu
-- [ ] Export JSON
-- [ ] QR code
+- [ ] Gestion des règles (ajout/modif/suppression, mode 2 minutes)
+- [ ] TTS (lecture audio, vitesse/voix)
+- [ ] IA d'aide (reformulation, questions/réponses)
 
-### Time
+### Narrator (`/backlog/narrator.md`)
 
-#### Story : Timer simple
+- [ ] Pré-scripter (création et édition de scripts, notes)
+- [ ] IA narrateur (prompts, TTS, marketplace)
 
-- [ ] Démarrer / stop / reset
-- [ ] Par joueur
-- [ ] Offline
+### Library (`/backlog/library.md`)
 
-#### Story : Chrono face à face
+- [ ] Liste et filtres des jeux (style, ambiance, nombre joueurs)
+- [ ] Gestion prêt / revente (historique, export JSON)
+- [ ] Statistiques (nombre de jeux, joueurs, filtres)
 
-- [ ] Écran divisé
-- [ ] Tap switch
+### Settings (`/backlog/settings.md`)
 
-#### Story : 4 joueurs
-
-- [ ] Écran en 4
-- [ ] Tap individuel
-
-#### Story : Sablier
-
-- [ ] Animation
-- [ ] Retour téléphone
-
-#### Story : Marketplace timers
-
-- [ ] Presets par jeu
-- [ ] Import / export
-
-### Score
-
-#### Story : Scores
-
-- [ ] Par manche
-- [ ] Total
-
-#### Story : Clôture
-
-- [ ] Bouton clôture
-- [ ] Export
-
-### Home par jeu
-
-#### Story : Lancement intelligent
-
-- [ ] Choisir jeu
-- [ ] Charger dés / temps / score / audio
-- [ ] Option config manuelle
-
-### Audio
-
-#### Story : Playlists
-
-- [ ] Musiques libres
-- [ ] YouTube embed
-- [ ] Partage
-
-#### Story : Soundboard
-
-- [ ] Sons rapides
-- [ ] Volume individuel
-
-### Rules
-
-#### Story : Règles
-
-- [ ] Texte mobile
-- [ ] Recherche
-- [ ] Version 2 minutes
-- [ ] Marque‑pages
-
-#### Story : TTS
-
-- [ ] Lecture
-- [ ] Vitesse / voix
-
-#### Story : IA règles
-
-- [ ] Reformulation
-- [ ] Questions / réponses
-
-### Narrator
-
-#### Story : Pré‑scripter
-
-- [ ] Scénarios
-- [ ] Notes
-
-#### Story : IA narrateur
-
-- [ ] Prompts
-- [ ] Marketplace
-
-### Library
-
-#### Story : Ludothèque
-
-- [ ] Liste jeux
-- [ ] Filtres
-- [ ] Prêt / revente
-- [ ] Stats
-
-### Settings
-
-#### Story : Personnalisation
-
-- [ ] Thème
-- [ ] Police
-- [ ] Tailles
-- [ ] Offline
+- [ ] Personnalisation thème / police / taille
+- [ ] Gestion offline (activation/désactivation, sauvegarde)
 
 ---
 

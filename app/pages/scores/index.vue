@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ArrowLeft, Plus, Trash2, Users, Clock } from 'lucide-vue-next'
+
 const { t } = useI18n()
 const { sessions, isLoaded, deleteSession } = useScoreSessions()
 
@@ -20,144 +22,104 @@ function confirmDelete(id: string, name: string): void {
 </script>
 
 <template>
-   <div class="scores-page">
-      <header class="scores-page__header">
-         <NuxtLink to="/" class="scores-page__back">
-            <span>←</span>
-         </NuxtLink>
-         <h1 class="heading">{{ t('scores.title') }}</h1>
-         <NuxtLink to="/scores/new" class="btn-primary scores-page__new">{{ t('scores.new') }}</NuxtLink>
+   <div class="min-h-dvh bg-background">
+      <header class="sticky top-0 z-10 bg-card/80 backdrop-blur-lg border-b border-border">
+         <div class="flex items-center gap-4 px-4 py-4">
+            <NuxtLink
+               to="/"
+               class="scores-page__back flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+               v-motion
+               :initial="{ opacity: 0, x: -10 }"
+               :enter="{ opacity: 1, x: 0 }"
+            >
+               <ArrowLeft class="h-5 w-5" />
+            </NuxtLink>
+            <h1
+               class="heading flex-1 font-display text-lg font-bold tracking-tight"
+               v-motion
+               :initial="{ opacity: 0, y: -10 }"
+               :enter="{ opacity: 1, y: 0, transition: { delay: 100 } }"
+            >
+               {{ t('scores.title') }}
+            </h1>
+            <NuxtLink
+               to="/scores/new"
+               v-motion
+               :initial="{ opacity: 0, scale: 0.8 }"
+               :enter="{ opacity: 1, scale: 1, transition: { delay: 150 } }"
+            >
+               <UiButton size="sm" class="scores-page__new">
+                  <Plus class="h-4 w-4 mr-1" />
+                  {{ t('scores.new') }}
+               </UiButton>
+            </NuxtLink>
+         </div>
       </header>
 
-      <div class="scores-page__content">
+      <div class="p-4">
          <template v-if="isLoaded">
-            <ul v-if="sessions.length > 0" class="session-list">
-               <li v-for="session in sessions" :key="session.id" class="session-item card-game">
-                  <NuxtLink :to="`/scores/${session.id}`" class="session-item__link">
-                     <div class="session-item__info">
-                        <h2 class="session-item__name">{{ session.name }}</h2>
-                        <p class="session-item__meta">
-                           {{ session.players.length }} {{ t('scores.players') }} · {{ t('scores.round') }} {{ session.currentRound }}
-                        </p>
-                        <p class="session-item__date">{{ formatDate(session.updatedAt) }}</p>
+            <ul v-if="sessions.length > 0" class="space-y-3">
+               <li
+                  v-for="(session, index) in sessions"
+                  :key="session.id"
+                  v-motion
+                  :initial="{ opacity: 0, y: 20 }"
+                  :enter="{ opacity: 1, y: 0, transition: { delay: 150 + index * 50 } }"
+               >
+                  <UiCard hoverable class="session-item p-4">
+                     <div class="flex items-center gap-3">
+                        <NuxtLink :to="`/scores/${session.id}`" class="flex-1">
+                           <h2 class="font-display font-semibold text-foreground mb-1">
+                              {{ session.name }}
+                           </h2>
+                           <div class="flex items-center gap-3 text-sm text-muted-foreground">
+                              <span class="flex items-center gap-1">
+                                 <Users class="h-3.5 w-3.5" />
+                                 {{ session.players.length }} {{ t('scores.players') }}
+                              </span>
+                              <span class="flex items-center gap-1">
+                                 <Clock class="h-3.5 w-3.5" />
+                                 {{ t('scores.round') }} {{ session.currentRound }}
+                              </span>
+                           </div>
+                           <p class="text-xs text-muted-foreground mt-1">
+                              {{ formatDate(session.updatedAt) }}
+                           </p>
+                        </NuxtLink>
+                        <button
+                           class="session-item__delete p-2 text-muted-foreground hover:text-destructive transition-colors"
+                           @click.prevent="confirmDelete(session.id, session.name)"
+                        >
+                           <Trash2 class="h-5 w-5" />
+                        </button>
                      </div>
-                  </NuxtLink>
-                  <button class="session-item__delete" @click.prevent="confirmDelete(session.id, session.name)">
-                     ×
-                  </button>
+                  </UiCard>
                </li>
             </ul>
 
-            <div v-else class="scores-page__empty">
-               <p>{{ t('scores.noSessions') }}</p>
-               <NuxtLink to="/scores/new" class="btn-primary">{{ t('scores.createFirst') }}</NuxtLink>
+            <div
+               v-else
+               class="scores-empty flex flex-col items-center justify-center gap-4 py-16 text-center"
+               v-motion
+               :initial="{ opacity: 0, y: 20 }"
+               :enter="{ opacity: 1, y: 0, transition: { delay: 200 } }"
+            >
+               <p class="text-muted-foreground">{{ t('scores.noSessions') }}</p>
+               <NuxtLink to="/scores/new">
+                  <UiButton>{{ t('scores.createFirst') }}</UiButton>
+               </NuxtLink>
             </div>
          </template>
 
-         <p v-else class="scores-page__loading">{{ t('common.loading') }}</p>
+         <p
+            v-else
+            class="text-center text-muted-foreground py-12"
+            v-motion
+            :initial="{ opacity: 0 }"
+            :enter="{ opacity: 1 }"
+         >
+            {{ t('common.loading') }}
+         </p>
       </div>
    </div>
 </template>
-
-<style scoped>
-.scores-page {
-   min-height: 100dvh;
-   display: flex;
-   flex-direction: column;
-}
-
-.scores-page__header {
-   display: flex;
-   align-items: center;
-   gap: var(--gap-md);
-   padding: var(--gap-md);
-   background: var(--bg-secondary);
-}
-
-.scores-page__back {
-   font-size: var(--text-lg);
-   color: var(--text-primary);
-   padding: var(--gap-xs);
-}
-
-.scores-page__header .heading {
-   flex: 1;
-   font-size: var(--text-lg);
-}
-
-.scores-page__new {
-   padding: var(--gap-xs) var(--gap-md);
-}
-
-.scores-page__content {
-   flex: 1;
-   padding: var(--gap-md);
-}
-
-.session-list {
-   display: flex;
-   flex-direction: column;
-   gap: var(--gap-sm);
-}
-
-.session-item {
-   display: flex;
-   align-items: center;
-}
-
-.session-item__link {
-   flex: 1;
-   display: block;
-}
-
-.session-item__info {
-   display: flex;
-   flex-direction: column;
-   gap: 2px;
-}
-
-.session-item__name {
-   font-family: var(--font-display);
-   font-size: var(--text-base);
-   font-weight: 600;
-   color: var(--text-primary);
-}
-
-.session-item__meta {
-   font-size: var(--text-sm);
-   color: var(--text-secondary);
-}
-
-.session-item__date {
-   font-size: var(--text-xs);
-   color: var(--text-secondary);
-}
-
-.session-item__delete {
-   font-size: var(--text-xl);
-   color: var(--text-secondary);
-   padding: var(--gap-sm);
-}
-
-.session-item__delete:hover {
-   color: var(--error);
-}
-
-.scores-page__empty {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
-   gap: var(--gap-md);
-   padding: var(--gap-lg);
-   text-align: center;
-   color: var(--text-secondary);
-   min-height: 300px;
-}
-
-.scores-page__loading {
-   text-align: center;
-   color: var(--text-secondary);
-   padding: var(--gap-lg);
-}
-</style>

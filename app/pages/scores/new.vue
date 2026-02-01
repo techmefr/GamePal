@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ArrowLeft, Plus, X, Users, UsersRound } from 'lucide-vue-next'
 import type { IPlayer } from '~/types'
 
 const { t } = useI18n()
@@ -60,275 +61,158 @@ onMounted(() => {
 </script>
 
 <template>
-   <div class="new-session">
-      <header class="new-session__header">
-         <NuxtLink to="/scores" class="new-session__back">
-            <span>←</span>
-         </NuxtLink>
-         <h1 class="heading">{{ t('scores.newSession.title') }}</h1>
+   <div class="min-h-dvh bg-background">
+      <header class="sticky top-0 z-10 bg-card/80 backdrop-blur-lg border-b border-border">
+         <div class="flex items-center gap-4 px-4 py-4">
+            <NuxtLink
+               to="/scores"
+               class="new-session__back flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+               v-motion
+               :initial="{ opacity: 0, x: -10 }"
+               :enter="{ opacity: 1, x: 0 }"
+            >
+               <ArrowLeft class="h-5 w-5" />
+            </NuxtLink>
+            <h1
+               class="heading font-display text-lg font-bold tracking-tight"
+               v-motion
+               :initial="{ opacity: 0, y: -10 }"
+               :enter="{ opacity: 1, y: 0, transition: { delay: 100 } }"
+            >
+               {{ t('scores.newSession.title') }}
+            </h1>
+         </div>
       </header>
 
-      <div class="new-session__content">
-         <div v-if="showSavedPlayers" class="saved-players-banner card-game">
-            <p>{{ t('scores.newSession.useSavedPlayers') }}</p>
-            <div class="saved-players-banner__actions">
-               <button class="btn-primary" @click="useSavedPlayers">{{ t('scores.newSession.yes') }}</button>
-               <button class="saved-players-banner__dismiss" @click="showSavedPlayers = false">
+      <div class="p-4 space-y-6">
+         <UiCard
+            v-if="showSavedPlayers"
+            class="saved-players-banner p-4"
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 150 } }"
+         >
+            <p class="text-center text-foreground mb-3">{{ t('scores.newSession.useSavedPlayers') }}</p>
+            <div class="flex gap-2 justify-center">
+               <UiButton size="sm" @click="useSavedPlayers">{{ t('scores.newSession.yes') }}</UiButton>
+               <UiButton variant="ghost" size="sm" @click="showSavedPlayers = false">
                   {{ t('scores.newSession.no') }}
-               </button>
+               </UiButton>
             </div>
-         </div>
+         </UiCard>
 
-         <div class="form-group">
-            <label class="form-label">{{ t('scores.newSession.sessionName') }}</label>
-            <input
+         <section
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 200 } }"
+         >
+            <label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">
+               {{ t('scores.newSession.sessionName') }}
+            </label>
+            <UiInput
                v-model="sessionName"
-               type="text"
-               class="form-input"
                :placeholder="t('scores.newSession.sessionNamePlaceholder')"
             />
-         </div>
+         </section>
 
-         <div class="form-group">
-            <label class="form-label">{{ t('scores.newSession.players') }}</label>
-            <div class="player-fields">
-               <div v-for="(_, index) in playerNames" :key="index" class="player-field">
-                  <input
+         <section
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 250 } }"
+         >
+            <label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">
+               {{ t('scores.newSession.players') }}
+            </label>
+            <div class="space-y-2">
+               <div v-for="(_, index) in playerNames" :key="index" class="flex gap-2">
+                  <UiInput
                      v-model="playerNames[index]"
-                     type="text"
-                     class="form-input"
+                     class="flex-1"
                      :placeholder="t('scores.newSession.playerPlaceholder', { n: index + 1 })"
                   />
                   <button
                      v-if="playerNames.length > 2"
-                     class="player-field__remove"
+                     class="player-remove p-2 text-muted-foreground hover:text-destructive transition-colors"
                      @click="removePlayerField(index)"
                   >
-                     ×
+                     <X class="h-5 w-5" />
                   </button>
                </div>
             </div>
-            <button class="add-player-btn" @click="addPlayerField">{{ t('scores.newSession.addPlayer') }}</button>
-         </div>
+            <button
+               class="add-player-btn mt-3 text-primary text-sm font-medium flex items-center gap-1 hover:text-primary/80 transition-colors"
+               @click="addPlayerField"
+            >
+               <Plus class="h-4 w-4" />
+               {{ t('scores.newSession.addPlayer') }}
+            </button>
+         </section>
 
-         <div class="form-group">
-            <label class="form-label">{{ t('scores.newSession.gameMode') }}</label>
-            <div class="toggle-group">
-               <button
-                  class="toggle-btn"
-                  :class="{ 'toggle-btn--active': !isTeamMode }"
-                  @click="isTeamMode = false"
-               >
-                  {{ t('scores.newSession.individual') }}
-               </button>
-               <button
-                  class="toggle-btn"
-                  :class="{ 'toggle-btn--active': isTeamMode }"
-                  @click="isTeamMode = true"
-               >
-                  {{ t('scores.newSession.teams') }}
-               </button>
-            </div>
-         </div>
+         <section
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 300 } }"
+         >
+            <label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">
+               {{ t('scores.newSession.gameMode') }}
+            </label>
+            <UiTabs
+               :tabs="[
+                  { value: 'individual', label: t('scores.newSession.individual'), icon: Users },
+                  { value: 'teams', label: t('scores.newSession.teams'), icon: UsersRound },
+               ]"
+               :model-value="isTeamMode ? 'teams' : 'individual'"
+               @update:model-value="isTeamMode = $event === 'teams'"
+            />
+         </section>
 
-         <div class="form-group">
-            <label class="form-label">{{ t('scores.newSession.endCondition') }}</label>
-            <div class="end-condition">
-               <div class="end-condition__field">
-                  <span>{{ t('scores.newSession.maxRounds') }}</span>
-                  <input
+         <section
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 350 } }"
+         >
+            <label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">
+               {{ t('scores.newSession.endCondition') }}
+            </label>
+            <div class="grid grid-cols-2 gap-3">
+               <UiCard class="end-condition p-3">
+                  <span class="text-sm text-muted-foreground block mb-2">
+                     {{ t('scores.newSession.maxRounds') }}
+                  </span>
+                  <UiInput
                      v-model.number="maxRounds"
                      type="number"
-                     class="form-input form-input--small"
+                     class="text-center"
                      min="1"
-                     placeholder="∞"
+                     placeholder="--"
                   />
-               </div>
-               <div class="end-condition__field">
-                  <span>{{ t('scores.newSession.targetScore') }}</span>
-                  <input
+               </UiCard>
+               <UiCard class="end-condition p-3">
+                  <span class="text-sm text-muted-foreground block mb-2">
+                     {{ t('scores.newSession.targetScore') }}
+                  </span>
+                  <UiInput
                      v-model.number="maxScore"
                      type="number"
-                     class="form-input form-input--small"
+                     class="text-center"
                      min="1"
-                     placeholder="∞"
+                     placeholder="--"
                   />
-               </div>
+               </UiCard>
             </div>
-         </div>
+         </section>
 
-         <button class="btn-primary new-session__create" :disabled="!canCreate" @click="handleCreate">
+         <UiButton
+            class="create-btn w-full mt-6"
+            size="lg"
+            :disabled="!canCreate"
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 400 } }"
+            @click="handleCreate"
+         >
             {{ t('scores.newSession.create') }}
-         </button>
+         </UiButton>
       </div>
    </div>
 </template>
-
-<style scoped>
-.new-session {
-   min-height: 100dvh;
-   display: flex;
-   flex-direction: column;
-}
-
-.new-session__header {
-   display: flex;
-   align-items: center;
-   gap: var(--gap-md);
-   padding: var(--gap-md);
-   background: var(--bg-secondary);
-}
-
-.new-session__back {
-   font-size: var(--text-lg);
-   color: var(--text-primary);
-   padding: var(--gap-xs);
-}
-
-.new-session__header .heading {
-   flex: 1;
-   font-size: var(--text-lg);
-}
-
-.new-session__content {
-   flex: 1;
-   padding: var(--gap-md);
-   display: flex;
-   flex-direction: column;
-   gap: var(--gap-lg);
-}
-
-.saved-players-banner {
-   display: flex;
-   flex-direction: column;
-   gap: var(--gap-sm);
-   text-align: center;
-}
-
-.saved-players-banner__actions {
-   display: flex;
-   gap: var(--gap-sm);
-   justify-content: center;
-}
-
-.saved-players-banner__dismiss {
-   padding: var(--gap-xs) var(--gap-md);
-   color: var(--text-secondary);
-}
-
-.form-group {
-   display: flex;
-   flex-direction: column;
-   gap: var(--gap-sm);
-}
-
-.form-label {
-   font-size: var(--text-sm);
-   color: var(--text-secondary);
-   text-transform: uppercase;
-   letter-spacing: 0.05em;
-}
-
-.form-input {
-   padding: var(--gap-sm) var(--gap-md);
-   border-radius: var(--radius-sm);
-   border: var(--border);
-   background: var(--surface);
-   color: var(--text-primary);
-   font-size: var(--text-base);
-}
-
-.form-input:focus {
-   outline: 2px solid var(--accent-primary);
-   outline-offset: 2px;
-}
-
-.form-input--small {
-   width: 80px;
-   text-align: center;
-}
-
-.player-fields {
-   display: flex;
-   flex-direction: column;
-   gap: var(--gap-sm);
-}
-
-.player-field {
-   display: flex;
-   gap: var(--gap-sm);
-}
-
-.player-field .form-input {
-   flex: 1;
-}
-
-.player-field__remove {
-   font-size: var(--text-lg);
-   color: var(--text-secondary);
-   padding: 0 var(--gap-sm);
-}
-
-.player-field__remove:hover {
-   color: var(--error);
-}
-
-.add-player-btn {
-   color: var(--accent-primary);
-   font-size: var(--text-sm);
-   padding: var(--gap-sm);
-   text-align: left;
-}
-
-.toggle-group {
-   display: flex;
-   gap: var(--gap-xs);
-}
-
-.toggle-btn {
-   flex: 1;
-   padding: var(--gap-sm) var(--gap-md);
-   border-radius: var(--radius-sm);
-   font-size: var(--text-sm);
-   color: var(--text-secondary);
-   background: var(--surface);
-   border: var(--border);
-   transition: all var(--transition-fast);
-}
-
-.toggle-btn--active {
-   background: var(--accent-primary);
-   color: #ffffff;
-   border-color: var(--accent-primary);
-}
-
-.end-condition {
-   display: flex;
-   gap: var(--gap-md);
-}
-
-.end-condition__field {
-   flex: 1;
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
-   gap: var(--gap-sm);
-   padding: var(--gap-sm);
-   background: var(--surface);
-   border-radius: var(--radius-sm);
-   border: var(--border);
-   font-size: var(--text-sm);
-   color: var(--text-secondary);
-}
-
-.new-session__create {
-   margin-top: auto;
-   width: 100%;
-   justify-content: center;
-}
-
-.new-session__create:disabled {
-   opacity: 0.5;
-   cursor: not-allowed;
-}
-</style>

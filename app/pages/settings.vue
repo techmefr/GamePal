@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ArrowLeft, Moon, Sun, Languages, Eye, Trash2 } from 'lucide-vue-next'
+
 const { t, locale, locales } = useI18n()
 const { theme, setTheme } = useTheme()
 
@@ -47,224 +49,144 @@ onMounted(() => {
 </script>
 
 <template>
-   <div class="settings-page">
-      <header class="settings-page__header">
-         <NuxtLink to="/" class="settings-page__back">
-            <span>←</span>
-         </NuxtLink>
-         <h1 class="heading">{{ t('settings.title') }}</h1>
+   <div class="min-h-dvh bg-background">
+      <header class="sticky top-0 z-10 bg-card/80 backdrop-blur-lg border-b border-border">
+         <div class="flex items-center gap-4 px-4 py-4">
+            <NuxtLink
+               to="/"
+               class="settings-page__back flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+               v-motion
+               :initial="{ opacity: 0, x: -10 }"
+               :enter="{ opacity: 1, x: 0 }"
+            >
+               <ArrowLeft class="h-5 w-5" />
+            </NuxtLink>
+            <h1
+               class="heading font-display text-lg font-bold tracking-tight"
+               v-motion
+               :initial="{ opacity: 0, y: -10 }"
+               :enter="{ opacity: 1, y: 0, transition: { delay: 100 } }"
+            >
+               {{ t('settings.title') }}
+            </h1>
+         </div>
       </header>
 
-      <div class="settings-page__content">
-         <section class="settings-section">
-            <h2 class="settings-section__title">{{ t('settings.appearance') }}</h2>
+      <div class="p-4 space-y-6">
+         <section
+            class="settings-section"
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 150 } }"
+         >
+            <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+               {{ t('settings.appearance') }}
+            </h2>
 
-            <div class="setting-item card-game">
-               <div class="setting-item__info">
-                  <span class="setting-item__label">{{ t('settings.theme') }}</span>
-                  <span class="setting-item__description">{{ t('settings.themeDescription') }}</span>
+            <UiCard class="p-4 mb-3">
+               <div class="flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <Moon v-if="theme === 'dark'" class="h-5 w-5" />
+                        <Sun v-else class="h-5 w-5" />
+                     </div>
+                     <div>
+                        <p class="font-medium">{{ t('settings.theme') }}</p>
+                        <p class="text-sm text-muted-foreground">{{ t('settings.themeDescription') }}</p>
+                     </div>
+                  </div>
+                  <UiTabs
+                     :tabs="[
+                        { value: 'dark', label: t('settings.dark') },
+                        { value: 'light', label: t('settings.light') },
+                     ]"
+                     :model-value="theme"
+                     class="theme-toggle"
+                     @update:model-value="setTheme($event as 'dark' | 'light')"
+                  />
                </div>
-               <div class="theme-toggle">
-                  <button
-                     class="theme-toggle__btn"
-                     :class="{ 'theme-toggle__btn--active': theme === 'dark' }"
-                     @click="setTheme('dark')"
-                  >
-                     {{ t('settings.dark') }}
-                  </button>
-                  <button
-                     class="theme-toggle__btn"
-                     :class="{ 'theme-toggle__btn--active': theme === 'light' }"
-                     @click="setTheme('light')"
-                  >
-                     {{ t('settings.light') }}
-                  </button>
-               </div>
-            </div>
+            </UiCard>
 
-            <div class="setting-item card-game">
-               <div class="setting-item__info">
-                  <span class="setting-item__label">{{ t('settings.language') }}</span>
-                  <span class="setting-item__description">{{ t('settings.languageDescription') }}</span>
+            <UiCard class="p-4 mb-3">
+               <div class="flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
+                        <Languages class="h-5 w-5" />
+                     </div>
+                     <div>
+                        <p class="font-medium">{{ t('settings.language') }}</p>
+                        <p class="text-sm text-muted-foreground">{{ t('settings.languageDescription') }}</p>
+                     </div>
+                  </div>
+                  <div class="locale-toggle flex gap-1 rounded-lg bg-muted p-1">
+                     <button
+                        v-for="loc in availableLocales"
+                        :key="loc.code"
+                        class="locale-toggle__btn px-3 py-1.5 rounded-md text-sm font-medium transition-all"
+                        :class="locale === loc.code ? 'bg-primary text-primary-foreground shadow' : 'text-muted-foreground hover:text-foreground'"
+                        @click="setLocale(loc.code)"
+                     >
+                        {{ loc.name }}
+                     </button>
+                  </div>
                </div>
-               <div class="locale-toggle">
-                  <button
-                     v-for="loc in availableLocales"
-                     :key="loc.code"
-                     class="locale-toggle__btn"
-                     :class="{ 'locale-toggle__btn--active': locale === loc.code }"
-                     @click="setLocale(loc.code)"
-                  >
-                     {{ loc.name }}
-                  </button>
-               </div>
-            </div>
+            </UiCard>
 
-            <div class="setting-item card-game">
-               <div class="setting-item__info">
-                  <span class="setting-item__label">{{ t('settings.dyslexiaMode') }}</span>
-                  <span class="setting-item__description">{{ t('settings.dyslexiaDescription') }}</span>
+            <UiCard class="p-4">
+               <div class="flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-500/10 text-green-500">
+                        <Eye class="h-5 w-5" />
+                     </div>
+                     <div>
+                        <p class="font-medium">{{ t('settings.dyslexiaMode') }}</p>
+                        <p class="text-sm text-muted-foreground">{{ t('settings.dyslexiaDescription') }}</p>
+                     </div>
+                  </div>
+                  <UiSwitch
+                     :model-value="isDyslexiaMode"
+                     class="toggle-switch"
+                     @update:model-value="toggleDyslexiaMode"
+                  />
                </div>
-               <button
-                  class="toggle-switch"
-                  :class="{ 'toggle-switch--active': isDyslexiaMode }"
-                  @click="toggleDyslexiaMode"
-               >
-                  <span class="toggle-switch__thumb"></span>
-               </button>
-            </div>
+            </UiCard>
          </section>
 
-         <section class="settings-section">
-            <h2 class="settings-section__title">{{ t('settings.data') }}</h2>
+         <section
+            class="settings-section"
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 250 } }"
+         >
+            <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+               {{ t('settings.data') }}
+            </h2>
 
-            <button class="setting-item setting-item--danger card-game" @click="handleClearData">
-               <div class="setting-item__info">
-                  <span class="setting-item__label">{{ t('settings.clearData') }}</span>
-                  <span class="setting-item__description">{{ t('settings.clearDataDescription') }}</span>
+            <UiCard
+               hoverable
+               class="setting-item--danger p-4 cursor-pointer border-destructive/20 hover:border-destructive/50 transition-colors"
+               @click="handleClearData"
+            >
+               <div class="flex items-center gap-3">
+                  <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-destructive/10 text-destructive">
+                     <Trash2 class="h-5 w-5" />
+                  </div>
+                  <div>
+                     <p class="font-medium text-destructive">{{ t('settings.clearData') }}</p>
+                     <p class="text-sm text-muted-foreground">{{ t('settings.clearDataDescription') }}</p>
+                  </div>
                </div>
-            </button>
+            </UiCard>
          </section>
 
-         <footer class="settings-page__footer">
+         <footer
+            class="settings-page__footer text-center py-8 text-sm text-muted-foreground"
+            v-motion
+            :initial="{ opacity: 0 }"
+            :enter="{ opacity: 1, transition: { delay: 350 } }"
+         >
             <p>{{ t('settings.version') }}</p>
          </footer>
       </div>
    </div>
 </template>
-
-<style scoped>
-.settings-page {
-   min-height: 100dvh;
-   display: flex;
-   flex-direction: column;
-}
-
-.settings-page__header {
-   display: flex;
-   align-items: center;
-   gap: var(--gap-md);
-   padding: var(--gap-md);
-   background: var(--bg-secondary);
-}
-
-.settings-page__back {
-   font-size: var(--text-lg);
-   color: var(--text-primary);
-   padding: var(--gap-xs);
-}
-
-.settings-page__header .heading {
-   flex: 1;
-   font-size: var(--text-lg);
-}
-
-.settings-page__content {
-   flex: 1;
-   padding: var(--gap-md);
-   display: flex;
-   flex-direction: column;
-   gap: var(--gap-lg);
-}
-
-.settings-section__title {
-   font-size: var(--text-sm);
-   color: var(--text-secondary);
-   text-transform: uppercase;
-   letter-spacing: 0.05em;
-   margin-bottom: var(--gap-sm);
-}
-
-.setting-item {
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
-   gap: var(--gap-md);
-   margin-bottom: var(--gap-sm);
-}
-
-.setting-item--danger {
-   cursor: pointer;
-}
-
-.setting-item--danger:hover {
-   border-color: var(--error);
-}
-
-.setting-item--danger .setting-item__label {
-   color: var(--error);
-}
-
-.setting-item__info {
-   display: flex;
-   flex-direction: column;
-   gap: 2px;
-}
-
-.setting-item__label {
-   font-size: var(--text-base);
-   color: var(--text-primary);
-}
-
-.setting-item__description {
-   font-size: var(--text-sm);
-   color: var(--text-secondary);
-}
-
-.theme-toggle,
-.locale-toggle {
-   display: flex;
-   gap: var(--gap-xs);
-}
-
-.theme-toggle__btn,
-.locale-toggle__btn {
-   padding: var(--gap-xs) var(--gap-md);
-   border-radius: var(--radius-sm);
-   font-size: var(--text-sm);
-   color: var(--text-secondary);
-   transition: all var(--transition-fast);
-}
-
-.theme-toggle__btn--active,
-.locale-toggle__btn--active {
-   background: var(--accent-primary);
-   color: #ffffff;
-}
-
-.toggle-switch {
-   width: 50px;
-   height: 28px;
-   border-radius: var(--radius-lg);
-   background: var(--surface-hover);
-   position: relative;
-   transition: background var(--transition-fast);
-}
-
-.toggle-switch--active {
-   background: var(--accent-primary);
-}
-
-.toggle-switch__thumb {
-   position: absolute;
-   top: 3px;
-   left: 3px;
-   width: 22px;
-   height: 22px;
-   border-radius: 50%;
-   background: #ffffff;
-   transition: transform var(--transition-fast);
-}
-
-.toggle-switch--active .toggle-switch__thumb {
-   transform: translateX(22px);
-}
-
-.settings-page__footer {
-   margin-top: auto;
-   text-align: center;
-   padding: var(--gap-lg);
-   color: var(--text-secondary);
-   font-size: var(--text-sm);
-}
-</style>

@@ -1,191 +1,130 @@
 <script setup lang="ts">
+import { Settings } from 'lucide-vue-next'
+
 const { t } = useI18n()
 
-interface IMode {
+interface IGameMode {
    id: string
    titleKey: string
    descriptionKey: string
-   icon: string
    route: string
-   isAvailable: boolean
+   enabled: boolean
+   icon: string
 }
 
-const modes: IMode[] = [
+const modes: IGameMode[] = [
    {
       id: 'random-picker',
       titleKey: 'home.modes.randomPicker.title',
       descriptionKey: 'home.modes.randomPicker.description',
-      icon: 'hand',
       route: '/random-picker',
-      isAvailable: true,
+      enabled: true,
+      icon: '🎲',
    },
    {
       id: 'dice',
       titleKey: 'home.modes.dice.title',
       descriptionKey: 'home.modes.dice.description',
-      icon: 'dice',
       route: '/dice',
-      isAvailable: true,
+      enabled: true,
+      icon: '🎯',
    },
    {
       id: 'scores',
       titleKey: 'home.modes.scores.title',
       descriptionKey: 'home.modes.scores.description',
-      icon: 'trophy',
       route: '/scores',
-      isAvailable: true,
+      enabled: true,
+      icon: '📊',
    },
    {
       id: 'music',
       titleKey: 'home.modes.music.title',
       descriptionKey: 'home.modes.music.description',
-      icon: 'music',
       route: '/music',
-      isAvailable: false,
+      enabled: false,
+      icon: '🎵',
    },
    {
       id: 'rules',
       titleKey: 'home.modes.rules.title',
       descriptionKey: 'home.modes.rules.description',
-      icon: 'book',
       route: '/rules',
-      isAvailable: false,
+      enabled: false,
+      icon: '📖',
    },
    {
       id: 'narrator',
       titleKey: 'home.modes.narrator.title',
       descriptionKey: 'home.modes.narrator.description',
-      icon: 'mic',
       route: '/narrator',
-      isAvailable: false,
+      enabled: false,
+      icon: '🎭',
    },
 ]
 </script>
 
 <template>
-   <div class="home">
-      <header class="home__header">
-         <NuxtLink to="/settings" class="home__settings">
-            <span>⚙</span>
-         </NuxtLink>
-         <h1 class="heading">{{ t('app.name') }}</h1>
-         <p class="home__subtitle">{{ t('app.tagline') }}</p>
+   <div class="min-h-dvh bg-background pb-8">
+      <header class="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
+         <div class="flex items-center justify-between px-4 py-4">
+            <div
+               v-motion
+               :initial="{ opacity: 0, x: -20 }"
+               :enter="{ opacity: 1, x: 0, transition: { delay: 100 } }"
+            >
+               <h1 class="font-display text-2xl font-bold tracking-tight">
+                  {{ t('app.name') }}
+               </h1>
+               <p class="text-sm text-muted-foreground">{{ t('app.tagline') }}</p>
+            </div>
+            <NuxtLink
+               to="/settings"
+               class="home__settings flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground"
+               v-motion
+               :initial="{ opacity: 0, scale: 0.8 }"
+               :enter="{ opacity: 1, scale: 1, transition: { delay: 200 } }"
+            >
+               <Settings class="h-5 w-5" />
+            </NuxtLink>
+         </div>
       </header>
 
-      <nav class="home__grid">
-         <NuxtLink
-            v-for="mode in modes"
-            :key="mode.id"
-            :to="mode.isAvailable ? mode.route : undefined"
-            class="card-game mode-card"
-            :class="{ 'mode-card--disabled': !mode.isAvailable }"
-         >
-            <div class="mode-card__icon">
-               <span>{{ mode.icon }}</span>
-            </div>
-            <h2 class="mode-card__title">{{ t(mode.titleKey) }}</h2>
-            <p class="mode-card__description">{{ t(mode.descriptionKey) }}</p>
-            <span v-if="!mode.isAvailable" class="mode-card__badge">{{ t('common.comingSoon') }}</span>
-         </NuxtLink>
-      </nav>
+      <main class="px-4 pt-6">
+         <div class="grid grid-cols-2 gap-4">
+            <component
+               :is="mode.enabled ? 'NuxtLink' : 'div'"
+               v-for="(mode, index) in modes"
+               :key="mode.id"
+               :to="mode.enabled ? mode.route : undefined"
+               class="mode-card"
+               :class="{ 'mode-card--disabled': !mode.enabled }"
+               v-motion
+               :initial="{ opacity: 0, y: 20 }"
+               :enter="{ opacity: 1, y: 0, transition: { delay: 150 + index * 50 } }"
+            >
+               <UiCard
+                  :hoverable="mode.enabled"
+                  class="relative h-full p-4"
+                  :class="{ 'opacity-50': !mode.enabled }"
+               >
+                  <UiBadge
+                     v-if="!mode.enabled"
+                     variant="secondary"
+                     class="mode-card__badge absolute -top-2 -right-2"
+                  >
+                     {{ t('common.comingSoon') }}
+                  </UiBadge>
+                  <div class="text-3xl mb-3">{{ mode.icon }}</div>
+                  <h2 class="font-display font-semibold text-foreground mb-1">
+                     {{ t(mode.titleKey) }}
+                  </h2>
+                  <p class="text-xs text-muted-foreground leading-relaxed">
+                     {{ t(mode.descriptionKey) }}
+                  </p>
+               </UiCard>
+            </component>
+         </div>
+      </main>
    </div>
 </template>
-
-<style scoped>
-.home {
-   min-height: 100dvh;
-   padding: var(--gap-md);
-   display: flex;
-   flex-direction: column;
-   gap: var(--gap-lg);
-}
-
-.home__header {
-   text-align: center;
-   padding: var(--gap-lg) 0;
-   position: relative;
-}
-
-.home__settings {
-   position: absolute;
-   top: var(--gap-md);
-   right: 0;
-   font-size: var(--text-lg);
-   color: var(--text-secondary);
-   padding: var(--gap-xs);
-}
-
-.home__header .heading {
-   font-size: var(--text-xl);
-   color: var(--text-primary);
-   margin-bottom: var(--gap-xs);
-}
-
-.home__subtitle {
-   font-size: var(--text-base);
-   color: var(--text-secondary);
-}
-
-.home__grid {
-   display: grid;
-   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-   gap: var(--gap-md);
-   max-width: 500px;
-   margin: 0 auto;
-   width: 100%;
-}
-
-.mode-card {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   text-align: center;
-   gap: var(--gap-xs);
-   position: relative;
-   cursor: pointer;
-}
-
-.mode-card--disabled {
-   opacity: 0.5;
-   cursor: not-allowed;
-}
-
-.mode-card--disabled:active {
-   transform: none;
-}
-
-.mode-card__icon {
-   width: 48px;
-   height: 48px;
-   background-color: var(--accent-primary);
-   border-radius: var(--radius-sm);
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   font-size: var(--text-lg);
-   color: var(--text-primary);
-}
-
-.mode-card__title {
-   font-family: var(--font-display);
-   font-size: var(--text-base);
-   font-weight: 600;
-   color: var(--text-primary);
-}
-
-.mode-card__description {
-   font-size: var(--text-sm);
-   color: var(--text-secondary);
-}
-
-.mode-card__badge {
-   position: absolute;
-   top: var(--gap-xs);
-   right: var(--gap-xs);
-   background-color: var(--accent-secondary);
-   color: #ffffff;
-   font-size: var(--text-xs);
-   padding: 0.2rem 0.5rem;
-   border-radius: var(--radius-lg);
-}
-</style>

@@ -29,7 +29,11 @@ export function useTheme() {
 
    function applyTheme(): void {
       if (import.meta.client) {
-         document.documentElement.setAttribute('data-theme', theme.value)
+         if (theme.value === 'light') {
+            document.documentElement.classList.add('light')
+         } else {
+            document.documentElement.classList.remove('light')
+         }
       }
    }
 

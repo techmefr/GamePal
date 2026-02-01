@@ -1,9 +1,11 @@
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineNuxtConfig({
    compatibilityDate: '2025-07-15',
 
    devtools: { enabled: true },
 
-   modules: ['@nuxt/eslint', '@nuxtjs/i18n'],
+   modules: ['@nuxt/eslint', '@nuxtjs/i18n', '@vueuse/motion/nuxt'],
 
    i18n: {
       locales: [
@@ -33,18 +35,28 @@ export default defineNuxtConfig({
       '~/assets/css/main.css',
    ],
 
+   nitro: {
+      output: {
+         publicDir: 'docs',
+      },
+   },
+
    app: {
       head: {
          title: 'Gamepal',
          meta: [
             { name: 'description', content: 'Board game companion app' },
-            { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' },
-            { name: 'theme-color', content: '#1a1a2e' },
+            {
+               name: 'viewport',
+               content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+            },
+            { name: 'theme-color', content: '#0f1115' },
          ],
       },
    },
 
    vite: {
+      plugins: [tailwindcss()],
       css: {
          preprocessorOptions: {
             scss: {
