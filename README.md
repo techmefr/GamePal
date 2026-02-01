@@ -67,8 +67,8 @@ Chaque story correspond à un fichier détaillé dans `/backlog`.
 
 ### Dice (`/backlog/dice.md`)
 
-- [ ] Table de dés (DiceCard, lancer, animation, blocage)
-- [ ] Catalogue de dés (liste, panier, ajout multiples)
+- [x] Table de dés (DiceCard, lancer, animation, blocage)
+- [x] Catalogue de dés (liste, panier, ajout multiples)
 - [ ] Créateur de dés personnalisés (faces, couleurs, icônes, export JSON/QR)
 
 ### Time (`/backlog/time.md`)
@@ -81,7 +81,7 @@ Chaque story correspond à un fichier détaillé dans `/backlog`.
 
 ### Score (`/backlog/score.md`)
 
-- [ ] Notation par manche (saisie, total, affichage)
+- [x] Notation par manche (saisie, total, affichage)
 - [ ] Clôture de partie (bouton clôture, export JSON)
 
 ### Home (`/backlog/home.md`)
