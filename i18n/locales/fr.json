@@ -107,18 +107,16 @@
          "sessionName": "Nom de la session",
          "sessionNamePlaceholder": "Soiree jeux, Tournoi...",
          "players": "Joueurs",
-         "playerPlaceholder": "Joueur {n}",
-         "addPlayer": "+ Ajouter un joueur",
+         "newPlayerPlaceholder": "Nouveau joueur...",
+         "selectExisting": "Ou selectionner des joueurs existants",
+         "noPlayersYet": "Ajoutez des joueurs pour commencer",
          "gameMode": "Mode de jeu",
          "individual": "Individuel",
          "teams": "Equipes",
          "endCondition": "Condition de fin (optionnel)",
          "maxRounds": "Manches max",
          "targetScore": "Score cible",
-         "create": "Creer la session",
-         "useSavedPlayers": "Utiliser les joueurs de la derniere partie ?",
-         "yes": "Oui",
-         "no": "Non"
+         "create": "Creer la session"
       },
       "session": {
          "leaderboard": "Classement",
@@ -127,6 +125,21 @@
          "nextRound": "Manche suivante",
          "export": "Exporter les resultats"
       }
+   },
+   "players": {
+      "title": "Joueurs",
+      "players": "Joueurs",
+      "teams": "Equipes",
+      "newPlayerName": "Nom du joueur",
+      "newTeamName": "Nom de l'equipe",
+      "noPlayers": "Aucun joueur",
+      "noTeams": "Aucune equipe",
+      "noMembers": "Aucun membre",
+      "members": "membres",
+      "removeFromTeam": "Retirer de l'equipe",
+      "deleteConfirm": "Supprimer {name} ?",
+      "deleteTeamConfirm": "Supprimer l'equipe {name} ?",
+      "unassigned": "Non assignes"
    },
    "settings": {
       "title": "Parametres",

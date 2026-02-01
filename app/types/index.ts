@@ -1,6 +1,8 @@
 export interface IPlayer {
    id: string
    name: string
+   color: string
+   avatar?: string
 }
 
 export interface IPickerPlayer extends IPlayer {
@@ -12,6 +14,7 @@ export interface ITeam {
    id: string
    name: string
    color: string
+   playerIds: string[]
 }
 
 export interface ITouchPoint {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Settings } from 'lucide-vue-next'
+import { Settings, Users } from 'lucide-vue-next'
 
 const { t } = useI18n()
 
@@ -78,15 +78,26 @@ const modes: IGameMode[] = [
                </h1>
                <p class="text-sm text-muted-foreground">{{ t('app.tagline') }}</p>
             </div>
-            <NuxtLink
-               to="/settings"
-               class="home__settings flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground"
-               v-motion
-               :initial="{ opacity: 0, scale: 0.8 }"
-               :enter="{ opacity: 1, scale: 1, transition: { delay: 200 } }"
-            >
-               <Settings class="h-5 w-5" />
-            </NuxtLink>
+            <div class="flex gap-2">
+               <NuxtLink
+                  to="/players"
+                  class="home__players flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground"
+                  v-motion
+                  :initial="{ opacity: 0, scale: 0.8 }"
+                  :enter="{ opacity: 1, scale: 1, transition: { delay: 200 } }"
+               >
+                  <Users class="h-5 w-5" />
+               </NuxtLink>
+               <NuxtLink
+                  to="/settings"
+                  class="home__settings flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground"
+                  v-motion
+                  :initial="{ opacity: 0, scale: 0.8 }"
+                  :enter="{ opacity: 1, scale: 1, transition: { delay: 250 } }"
+               >
+                  <Settings class="h-5 w-5" />
+               </NuxtLink>
+            </div>
          </div>
       </header>
 

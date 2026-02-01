@@ -107,18 +107,16 @@
          "sessionName": "Session name",
          "sessionNamePlaceholder": "Game night, Tournament...",
          "players": "Players",
-         "playerPlaceholder": "Player {n}",
-         "addPlayer": "+ Add player",
+         "newPlayerPlaceholder": "New player...",
+         "selectExisting": "Or select existing players",
+         "noPlayersYet": "Add players to get started",
          "gameMode": "Game mode",
          "individual": "Individual",
          "teams": "Teams",
          "endCondition": "End condition (optional)",
          "maxRounds": "Max rounds",
          "targetScore": "Target score",
-         "create": "Create session",
-         "useSavedPlayers": "Use players from your last game?",
-         "yes": "Yes",
-         "no": "No"
+         "create": "Create session"
       },
       "session": {
          "leaderboard": "Leaderboard",
@@ -127,6 +125,21 @@
          "nextRound": "Next round",
          "export": "Export results"
       }
+   },
+   "players": {
+      "title": "Players",
+      "players": "Players",
+      "teams": "Teams",
+      "newPlayerName": "Player name",
+      "newTeamName": "Team name",
+      "noPlayers": "No players yet",
+      "noTeams": "No teams yet",
+      "noMembers": "No members",
+      "members": "members",
+      "removeFromTeam": "Remove from team",
+      "deleteConfirm": "Delete {name}?",
+      "deleteTeamConfirm": "Delete team {name}?",
+      "unassigned": "Unassigned"
    },
    "settings": {
       "title": "Settings",
