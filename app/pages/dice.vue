@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ArrowLeft, Plus, X, Dices, Package, Pencil, Trash2, Play } from 'lucide-vue-next'
+import { ArrowLeft, Plus, X, Dices, Package, Pencil, Trash2, Play, Lock, Unlock, Download, QrCode } from 'lucide-vue-next'
+import { useDrag } from '@vueuse/gesture'
+import QRCode from 'qrcode'
 import type { IDie, ICustomDie, ICustomDieFace, IDicePreset } from '~/types'
 
 const { t } = useI18n()
@@ -39,6 +41,16 @@ const newPreset = ref<{ name: string; standardDice: { type: number; count: numbe
 
 const editingPresetId = ref<string | null>(null)
 
+const showExportModal = ref(false)
+const exportingDie = ref<ICustomDie | null>(null)
+const qrCodeDataUrl = ref<string | null>(null)
+
+const diceTrayRef = ref<HTMLElement | null>(null)
+
+const SHAKE_THRESHOLD = 15
+const SHAKE_TIMEOUT = 1000
+let lastShakeTime = 0
+
 const totalResult = computed((): number => {
    const standardTotal = dice.value.reduce((sum, die) => sum + (die.value ?? 0), 0)
    return standardTotal
@@ -53,6 +65,7 @@ function addDie(type: number): void {
       id: generateId(),
       type,
       value: null,
+      isLocked: false,
    }
    dice.value.push(die)
 }
@@ -70,6 +83,7 @@ function addCustomDieToTray(customDie: ICustomDie): void {
       name: customDie.name,
       faces: [...customDie.faces],
       currentFaceIndex: null,
+      isLocked: false,
    }
    customDiceInTray.value.push(dieCopy)
 }
@@ -95,10 +109,14 @@ function rollDice(): void {
    const maxIterations = 10
    const interval = setInterval(() => {
       for (const die of dice.value) {
-         die.value = Math.floor(Math.random() * die.type) + 1
+         if (!die.isLocked) {
+            die.value = Math.floor(Math.random() * die.type) + 1
+         }
       }
       for (const customDie of customDiceInTray.value) {
-         customDie.currentFaceIndex = Math.floor(Math.random() * customDie.faces.length)
+         if (!customDie.isLocked) {
+            customDie.currentFaceIndex = Math.floor(Math.random() * customDie.faces.length)
+         }
       }
       iterations++
 
@@ -107,6 +125,20 @@ function rollDice(): void {
          isRolling.value = false
       }
    }, 80)
+}
+
+function toggleDieLock(id: string): void {
+   const die = dice.value.find(d => d.id === id)
+   if (die) {
+      die.isLocked = !die.isLocked
+   }
+}
+
+function toggleCustomDieLock(id: string): void {
+   const die = customDiceInTray.value.find(d => d.id === id)
+   if (die) {
+      die.isLocked = !die.isLocked
+   }
 }
 
 function getDieLabel(type: number): string {
@@ -124,11 +156,17 @@ function removeFaceFromCustomDie(index: number): void {
 }
 
 function setFaceColor(index: number, color: string | null): void {
-   newCustomDie.value.faces[index].color = color
+   const face = newCustomDie.value.faces[index]
+   if (face) {
+      face.color = color
+   }
 }
 
 function setFaceEmoji(index: number, emoji: string): void {
-   newCustomDie.value.faces[index].value = emoji
+   const face = newCustomDie.value.faces[index]
+   if (face) {
+      face.value = emoji
+   }
 }
 
 function saveCustomDie(): void {
@@ -141,6 +179,7 @@ function saveCustomDie(): void {
       name,
       faces: newCustomDie.value.faces.map(f => ({ value: f.value.trim(), color: f.color })),
       currentFaceIndex: null,
+      isLocked: false,
    }
    customDice.value.push(die)
    resetCustomDieForm()
@@ -152,6 +191,45 @@ function deleteCustomDie(id: string): void {
    if (index !== -1) {
       customDice.value.splice(index, 1)
    }
+}
+
+async function exportCustomDie(die: ICustomDie): Promise<void> {
+   exportingDie.value = die
+   const exportData = {
+      name: die.name,
+      faces: die.faces,
+   }
+   try {
+      qrCodeDataUrl.value = await QRCode.toDataURL(JSON.stringify(exportData), {
+         width: 256,
+         margin: 2,
+         color: { dark: '#000000', light: '#ffffff' },
+      })
+      showExportModal.value = true
+   } catch (error) {
+      console.log('Erreur lors de la generation du QR code')
+   }
+}
+
+function downloadJson(die: ICustomDie): void {
+   const exportData = {
+      name: die.name,
+      faces: die.faces,
+   }
+   const json = JSON.stringify(exportData, null, 2)
+   const blob = new Blob([json], { type: 'application/json' })
+   const url = URL.createObjectURL(blob)
+   const a = document.createElement('a')
+   a.href = url
+   a.download = `${die.name.toLowerCase().replace(/\s+/g, '-')}.json`
+   a.click()
+   URL.revokeObjectURL(url)
+}
+
+function closeExportModal(): void {
+   showExportModal.value = false
+   exportingDie.value = null
+   qrCodeDataUrl.value = null
 }
 
 function resetCustomDieForm(): void {
@@ -177,6 +255,7 @@ function removeStandardDieFromPreset(type: number): void {
    const index = newPreset.value.standardDice.findIndex(d => d.type === type)
    if (index !== -1) {
       const item = newPreset.value.standardDice[index]
+      if (!item) return
       if (item.count > 1) {
          item.count--
       } else {
@@ -290,6 +369,48 @@ function cancelForm(): void {
    resetCustomDieForm()
    resetPresetForm()
 }
+
+function handleDeviceMotion(event: DeviceMotionEvent): void {
+   const acceleration = event.accelerationIncludingGravity
+   if (!acceleration) return
+
+   const x = acceleration.x ?? 0
+   const y = acceleration.y ?? 0
+   const z = acceleration.z ?? 0
+
+   const totalAcceleration = Math.sqrt(x * x + y * y + z * z)
+
+   if (totalAcceleration > SHAKE_THRESHOLD) {
+      const now = Date.now()
+      if (now - lastShakeTime > SHAKE_TIMEOUT) {
+         lastShakeTime = now
+         if (hasDiceInTray.value && !isRolling.value && viewMode.value === 'roll') {
+            rollDice()
+         }
+      }
+   }
+}
+
+useDrag(
+   ({ movement: [_x, y], dragging }) => {
+      if (!dragging && y < -50 && hasDiceInTray.value && !isRolling.value) {
+         rollDice()
+      }
+   },
+   { domTarget: diceTrayRef }
+)
+
+onMounted(() => {
+   if (typeof window !== 'undefined' && 'DeviceMotionEvent' in window) {
+      window.addEventListener('devicemotion', handleDeviceMotion)
+   }
+})
+
+onUnmounted(() => {
+   if (typeof window !== 'undefined' && 'DeviceMotionEvent' in window) {
+      window.removeEventListener('devicemotion', handleDeviceMotion)
+   }
+})
 </script>
 
 <template>
@@ -403,6 +524,12 @@ function cancelForm(): void {
                            <p class="text-xs text-muted-foreground">{{ die.faces.length }} {{ t('dice.faces') }}</p>
                         </button>
                         <button
+                           class="custom-die-card__export p-1 text-muted-foreground hover:text-primary transition-colors"
+                           @click.stop="exportCustomDie(die)"
+                        >
+                           <QrCode class="h-4 w-4" />
+                        </button>
+                        <button
                            class="custom-die-card__delete p-1 text-muted-foreground hover:text-destructive transition-colors"
                            @click.stop="deleteCustomDie(die.id)"
                         >
@@ -425,25 +552,37 @@ function cancelForm(): void {
 
          <section
             v-if="hasDiceInTray"
+            ref="diceTrayRef"
             v-motion
             :initial="{ opacity: 0, y: 20 }"
             :enter="{ opacity: 1, y: 0, transition: { delay: 300 } }"
          >
-            <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-               {{ t('dice.yourDice') }}
-            </h2>
+            <div class="flex items-center justify-between mb-3">
+               <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {{ t('dice.yourDice') }}
+               </h2>
+               <span class="text-xs text-muted-foreground">{{ t('dice.swipeToRoll') }}</span>
+            </div>
 
             <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
                <UiCard
                   v-for="die in dice"
                   :key="die.id"
                   class="die-in-tray relative p-3 text-center"
-                  :class="{ 'animate-shake': isRolling }"
+                  :class="{ 'animate-shake': isRolling && !die.isLocked, 'ring-2 ring-primary': die.isLocked }"
                >
                   <span class="text-xs text-muted-foreground uppercase">{{ getDieLabel(die.type) }}</span>
                   <span class="die-value block font-display text-2xl font-bold text-accent mt-1">
                      {{ die.value ?? '?' }}
                   </span>
+                  <button
+                     class="die-lock absolute top-1 left-1 p-1 transition-colors"
+                     :class="die.isLocked ? 'text-primary' : 'text-muted-foreground hover:text-primary'"
+                     @click="toggleDieLock(die.id)"
+                  >
+                     <Lock v-if="die.isLocked" class="h-3 w-3" />
+                     <Unlock v-else class="h-3 w-3" />
+                  </button>
                   <button
                      class="die-remove absolute top-1 right-1 p-1 text-muted-foreground hover:text-destructive transition-colors"
                      @click="removeDie(die.id)"
@@ -456,20 +595,28 @@ function cancelForm(): void {
                   v-for="die in customDiceInTray"
                   :key="die.id"
                   class="die-in-tray die-in-tray--custom relative p-3 text-center"
-                  :class="{ 'animate-shake': isRolling }"
+                  :class="{ 'animate-shake': isRolling && !die.isLocked, 'ring-2 ring-primary': die.isLocked }"
                >
                   <span class="text-xs text-muted-foreground truncate block">{{ die.name }}</span>
                   <span
                      class="custom-face-value block font-display text-lg font-bold mt-1 px-2 py-1 rounded"
                      :style="{
-                        backgroundColor: die.currentFaceIndex !== null && die.faces[die.currentFaceIndex].color
-                           ? die.faces[die.currentFaceIndex].color
+                        backgroundColor: die.currentFaceIndex !== null && die.faces[die.currentFaceIndex]?.color
+                           ? die.faces[die.currentFaceIndex]?.color ?? 'hsl(var(--primary))'
                            : 'hsl(var(--primary))',
                         color: '#ffffff'
                      }"
                   >
-                     {{ die.currentFaceIndex !== null ? die.faces[die.currentFaceIndex].value : '?' }}
+                     {{ die.currentFaceIndex !== null ? die.faces[die.currentFaceIndex]?.value ?? '?' : '?' }}
                   </span>
+                  <button
+                     class="die-lock absolute top-1 left-1 p-1 transition-colors"
+                     :class="die.isLocked ? 'text-primary' : 'text-muted-foreground hover:text-primary'"
+                     @click="toggleCustomDieLock(die.id)"
+                  >
+                     <Lock v-if="die.isLocked" class="h-3 w-3" />
+                     <Unlock v-else class="h-3 w-3" />
+                  </button>
                   <button
                      class="die-remove absolute top-1 right-1 p-1 text-muted-foreground hover:text-destructive transition-colors"
                      @click="removeCustomDieFromTray(die.id)"
@@ -734,6 +881,47 @@ function cancelForm(): void {
             </UiButton>
          </section>
       </div>
+
+      <Teleport to="body">
+         <div
+            v-if="showExportModal"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            @click.self="closeExportModal"
+         >
+            <UiCard class="export-modal w-full max-w-sm p-6 space-y-4">
+               <div class="flex items-center justify-between">
+                  <h3 class="text-lg font-semibold">{{ t('dice.exportDie') }}</h3>
+                  <button
+                     class="p-1 text-muted-foreground hover:text-foreground transition-colors"
+                     @click="closeExportModal"
+                  >
+                     <X class="h-5 w-5" />
+                  </button>
+               </div>
+
+               <p class="text-sm text-muted-foreground">{{ exportingDie?.name }}</p>
+
+               <div v-if="qrCodeDataUrl" class="flex justify-center">
+                  <img :src="qrCodeDataUrl" alt="QR Code" class="rounded-lg" />
+               </div>
+
+               <div class="flex gap-2">
+                  <UiButton
+                     v-if="exportingDie"
+                     variant="outline"
+                     class="flex-1"
+                     @click="downloadJson(exportingDie)"
+                  >
+                     <Download class="h-4 w-4 mr-2" />
+                     JSON
+                  </UiButton>
+                  <UiButton class="flex-1" @click="closeExportModal">
+                     {{ t('common.close') }}
+                  </UiButton>
+               </div>
+            </UiCard>
+         </div>
+      </Teleport>
    </div>
 </template>
 

@@ -11,7 +11,8 @@
       "cancel": "Annuler",
       "save": "Enregistrer",
       "loading": "Chargement...",
-      "comingSoon": "Bientot disponible"
+      "comingSoon": "Bientot disponible",
+      "close": "Fermer"
    },
    "home": {
       "modes": {
@@ -89,7 +90,9 @@
       "dieNamePlaceholder": "Direction, Action...",
       "faces": "Faces",
       "faceValue": "Valeur de la face",
-      "addFace": "+ Ajouter une face"
+      "addFace": "+ Ajouter une face",
+      "swipeToRoll": "Glissez pour lancer",
+      "exportDie": "Exporter le de"
    },
    "scores": {
       "title": "Scores",

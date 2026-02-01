@@ -25,6 +25,7 @@ export interface IDie {
    id: string
    type: number
    value: number | null
+   isLocked: boolean
 }
 
 export interface ICustomDieFace {
@@ -37,6 +38,7 @@ export interface ICustomDie {
    name: string
    faces: ICustomDieFace[]
    currentFaceIndex: number | null
+   isLocked: boolean
 }
 
 export interface IDicePreset {

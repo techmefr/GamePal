@@ -11,7 +11,8 @@
       "cancel": "Cancel",
       "save": "Save",
       "loading": "Loading...",
-      "comingSoon": "Coming soon"
+      "comingSoon": "Coming soon",
+      "close": "Close"
    },
    "home": {
       "modes": {
@@ -89,7 +90,9 @@
       "dieNamePlaceholder": "Direction, Action...",
       "faces": "Faces",
       "faceValue": "Face value",
-      "addFace": "+ Add face"
+      "addFace": "+ Add face",
+      "swipeToRoll": "Swipe up to roll",
+      "exportDie": "Export die"
    },
    "scores": {
       "title": "Scores",
