@@ -391,20 +391,24 @@ function handleDeviceMotion(event: DeviceMotionEvent): void {
    }
 }
 
-useDrag(
-   ({ movement: [_x, y], dragging }) => {
-      if (!dragging && y < -50 && hasDiceInTray.value && !isRolling.value) {
-         rollDice()
-      }
-   },
-   { domTarget: diceTrayRef }
-)
-
 onMounted(() => {
    if (typeof window !== 'undefined' && 'DeviceMotionEvent' in window) {
       window.addEventListener('devicemotion', handleDeviceMotion)
    }
 })
+
+watch(diceTrayRef, (target) => {
+   if (target) {
+      useDrag(
+         ({ movement: [_x, y], dragging }) => {
+            if (!dragging && y < -50 && hasDiceInTray.value && !isRolling.value) {
+               rollDice()
+            }
+         },
+         { domTarget: target }
+      )
+   }
+}, { immediate: true })
 
 onUnmounted(() => {
    if (typeof window !== 'undefined' && 'DeviceMotionEvent' in window) {
