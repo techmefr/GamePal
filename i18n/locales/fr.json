@@ -124,7 +124,8 @@
          "leaderboard": "Classement",
          "gameOver": "Partie terminee",
          "winner": "Gagnant : {name}",
-         "nextRound": "Manche suivante"
+         "nextRound": "Manche suivante",
+         "export": "Exporter les resultats"
       }
    },
    "settings": {

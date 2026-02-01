@@ -124,7 +124,8 @@
          "leaderboard": "Leaderboard",
          "gameOver": "Game Over",
          "winner": "Winner: {name}",
-         "nextRound": "Next round"
+         "nextRound": "Next round",
+         "export": "Export results"
       }
    },
    "settings": {

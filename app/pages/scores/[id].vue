@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, Trophy, Minus, Plus, ChevronRight } from 'lucide-vue-next'
+import { ArrowLeft, Trophy, Minus, Plus, ChevronRight, Download } from 'lucide-vue-next'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -50,6 +50,31 @@ function getRankClass(index: number): string {
    return ''
 }
 
+function exportSession(): void {
+   if (!session.value) return
+
+   const exportData = {
+      name: session.value.name,
+      date: session.value.createdAt,
+      players: session.value.players.map(p => ({
+         name: p.name,
+         scores: p.scores,
+         total: p.total,
+      })),
+      rounds: session.value.currentRound,
+      winner: sortedPlayers.value[0]?.name ?? null,
+   }
+
+   const json = JSON.stringify(exportData, null, 2)
+   const blob = new Blob([json], { type: 'application/json' })
+   const url = URL.createObjectURL(blob)
+   const a = document.createElement('a')
+   a.href = url
+   a.download = `${session.value.name.toLowerCase().replace(/\s+/g, '-')}-scores.json`
+   a.click()
+   URL.revokeObjectURL(url)
+}
+
 watch(sessions, () => {}, { deep: true })
 
 onMounted(() => {
@@ -73,13 +98,20 @@ onMounted(() => {
                <ArrowLeft class="h-5 w-5" />
             </NuxtLink>
             <h1
-               class="heading font-display text-lg font-bold tracking-tight truncate"
+               class="heading flex-1 font-display text-lg font-bold tracking-tight truncate"
                v-motion
                :initial="{ opacity: 0, y: -10 }"
                :enter="{ opacity: 1, y: 0, transition: { delay: 100 } }"
             >
                {{ session?.name ?? '' }}
             </h1>
+            <button
+               v-if="session"
+               class="export-btn flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+               @click="exportSession"
+            >
+               <Download class="h-5 w-5" />
+            </button>
          </div>
       </header>
 
@@ -93,9 +125,17 @@ onMounted(() => {
          >
             <Trophy class="h-10 w-10 mx-auto mb-3" />
             <h2 class="font-display text-xl font-bold mb-1">{{ t('scores.session.gameOver') }}</h2>
-            <p class="text-primary-foreground/80">
+            <p class="text-primary-foreground/80 mb-4">
                {{ t('scores.session.winner', { name: sortedPlayers[0]?.name }) }}
             </p>
+            <UiButton
+               variant="secondary"
+               class="export-results-btn"
+               @click="exportSession"
+            >
+               <Download class="h-4 w-4 mr-2" />
+               {{ t('scores.session.export') }}
+            </UiButton>
          </UiCard>
 
          <section
