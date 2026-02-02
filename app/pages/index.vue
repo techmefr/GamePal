@@ -30,12 +30,28 @@ const modes: IGameMode[] = [
       icon: '🎯',
    },
    {
+      id: 'time',
+      titleKey: 'home.modes.time.title',
+      descriptionKey: 'home.modes.time.description',
+      route: '/time',
+      enabled: true,
+      icon: '⏱️',
+   },
+   {
       id: 'scores',
       titleKey: 'home.modes.scores.title',
       descriptionKey: 'home.modes.scores.description',
       route: '/scores',
       enabled: true,
       icon: '📊',
+   },
+   {
+      id: 'library',
+      titleKey: 'home.modes.library.title',
+      descriptionKey: 'home.modes.library.description',
+      route: '/library',
+      enabled: true,
+      icon: '📚',
    },
    {
       id: 'music',

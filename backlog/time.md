@@ -56,10 +56,10 @@ Un timer basique par joueur.
 
 Tâches :
 
-* [ ] UI timer
-* [ ] Start / stop / reset
-* [ ] Choix durée
-* [ ] Affichage restant
+* [x] UI timer
+* [x] Start / stop / reset
+* [x] Choix durée
+* [x] Affichage restant
 
 ---
 
@@ -70,9 +70,9 @@ Mode échecs.
 
 Tâches :
 
-* [ ] Écran divisé
-* [ ] Tap → switch joueur
-* [ ] Indication joueur actif
+* [x] Écran divisé
+* [x] Tap → switch joueur
+* [x] Indication joueur actif
 
 ---
 
@@ -83,9 +83,9 @@ Chrono en simultané.
 
 Tâches :
 
-* [ ] Écran en 4 zones
-* [ ] Tap individuel
-* [ ] Couleur par joueur
+* [x] Écran en 4 zones
+* [x] Tap individuel
+* [x] Couleur par joueur
 
 ---
 

@@ -73,9 +73,9 @@ Chaque story correspond à un fichier détaillé dans `/backlog`.
 
 ### Time (`/backlog/time.md`)
 
-- [ ] Timer simple (start, stop, reset)
-- [ ] Chrono face à face (écran divisé, tap switch)
-- [ ] Mode 4 joueurs (écran en 4, tap individuel)
+- [x] Timer simple (start, stop, reset)
+- [x] Chrono face à face (écran divisé, tap switch)
+- [x] Mode 4 joueurs (écran en 4, tap individuel)
 - [ ] Sablier (animation, rotation téléphone)
 - [ ] Marketplace timers (presets par jeu, import/export)
 
@@ -108,9 +108,9 @@ Chaque story correspond à un fichier détaillé dans `/backlog`.
 
 ### Library (`/backlog/library.md`)
 
-- [ ] Liste et filtres des jeux (style, ambiance, nombre joueurs)
-- [ ] Gestion prêt / revente (historique, export JSON)
-- [ ] Statistiques (nombre de jeux, joueurs, filtres)
+- [x] Liste et filtres des jeux (style, ambiance, nombre joueurs)
+- [x] Gestion prêt / revente (historique, export JSON)
+- [x] Statistiques (nombre de jeux, joueurs, filtres)
 
 ### Settings (`/backlog/settings.md`)
 
