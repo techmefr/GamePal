@@ -96,8 +96,8 @@ Simuler un sablier réel.
 
 Tâches :
 
-* [ ] Animation sable
-* [ ] Inversion au retournement téléphone
+* [x] Animation sable
+* [x] Inversion au retournement téléphone
 
 ---
 
@@ -108,9 +108,9 @@ Presets communautaires.
 
 Tâches :
 
-* [ ] Liste presets
-* [ ] Import / export JSON
-* [ ] Sélection rapide par jeu
+* [x] Liste presets
+* [x] Import / export JSON
+* [x] Sélection rapide par jeu
 
 ---
 

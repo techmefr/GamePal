@@ -139,14 +139,18 @@
       "modes": {
          "simple": "Simple",
          "faceToFace": "2P",
-         "fourPlayers": "4P"
+         "fourPlayers": "4P",
+         "hourglass": "Sand"
       },
       "tapToStart": "Tap to start",
       "tapToPause": "Tap to pause",
       "tapToSwitch": "Tap to switch",
       "reset": "Reset",
       "duration": "Duration",
-      "timeUp": "Time's up!"
+      "timeUp": "Time's up!",
+      "flip": "Flip",
+      "presets": "Presets",
+      "presetName": "Preset name"
    },
    "library": {
       "title": "Library",

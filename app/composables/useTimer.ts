@@ -5,6 +5,17 @@ const PRESETS_STORAGE_KEY = 'gamepal-timer-presets'
 const DEFAULT_COLORS = ['#ef4444', '#3b82f6', '#22c55e', '#f59e0b']
 const DEFAULT_DURATION = 5 * 60
 
+const BUILTIN_PRESETS: ITimerPreset[] = [
+    { id: 'builtin-1', name: 'Speed (30s)', duration: 30, game: null },
+    { id: 'builtin-2', name: 'Blitz (1 min)', duration: 60, game: null },
+    { id: 'builtin-3', name: 'Standard (3 min)', duration: 180, game: null },
+    { id: 'builtin-4', name: 'Chess (5 min)', duration: 300, game: 'Chess' },
+    { id: 'builtin-5', name: 'Chess (10 min)', duration: 600, game: 'Chess' },
+    { id: 'builtin-6', name: 'Scrabble (2 min)', duration: 120, game: 'Scrabble' },
+    { id: 'builtin-7', name: 'Taboo (1 min)', duration: 60, game: 'Taboo' },
+    { id: 'builtin-8', name: 'Pictionary (1 min)', duration: 60, game: 'Pictionary' },
+]
+
 function generateId(): string {
     return Math.random().toString(36).substring(2, 9)
 }
@@ -67,6 +78,11 @@ export function useTimer() {
         for (let i = 0; i < 4; i++) {
             createTimer(`Player ${i + 1}`, duration, DEFAULT_COLORS[i])
         }
+    }
+
+    function setupHourglass(duration: number = DEFAULT_DURATION): void {
+        clearAllTimers()
+        createTimer('Hourglass', duration, '#f59e0b')
     }
 
     function clearAllTimers(): void {
@@ -205,6 +221,28 @@ export function useTimer() {
         }
     }
 
+    function exportPresets(): string {
+        return JSON.stringify(presets.value, null, 2)
+    }
+
+    function importPresets(json: string): boolean {
+        try {
+            const imported = JSON.parse(json) as ITimerPreset[]
+            if (!Array.isArray(imported)) return false
+
+            for (const preset of imported) {
+                if (preset.name && typeof preset.duration === 'number') {
+                    addPreset(preset.name, preset.duration, preset.game ?? null)
+                }
+            }
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    const allPresets = computed(() => [...BUILTIN_PRESETS, ...presets.value])
+
     function formatTime(seconds: number): string {
         const mins = Math.floor(seconds / 60)
         const secs = seconds % 60
@@ -230,12 +268,14 @@ export function useTimer() {
         timers: readonly(timers),
         activeTimerId: readonly(activeTimerId),
         presets: readonly(presets),
+        allPresets,
         isAnyRunning,
         isAnyFinished,
         createTimer,
         setupSimpleTimer,
         setupFaceToFaceTimers,
         setupFourPlayerTimers,
+        setupHourglass,
         clearAllTimers,
         startTimer,
         pauseTimer,
@@ -248,6 +288,8 @@ export function useTimer() {
         setAllDurations,
         addPreset,
         deletePreset,
+        exportPresets,
+        importPresets,
         formatTime,
         getProgress,
     }

@@ -139,14 +139,18 @@
       "modes": {
          "simple": "Simple",
          "faceToFace": "2J",
-         "fourPlayers": "4J"
+         "fourPlayers": "4J",
+         "hourglass": "Sablier"
       },
       "tapToStart": "Appuyez pour demarrer",
       "tapToPause": "Appuyez pour pause",
       "tapToSwitch": "Appuyez pour changer",
       "reset": "Reset",
       "duration": "Duree",
-      "timeUp": "Temps ecoule !"
+      "timeUp": "Temps ecoule !",
+      "flip": "Retourner",
+      "presets": "Presets",
+      "presetName": "Nom du preset"
    },
    "library": {
       "title": "Ludotheque",

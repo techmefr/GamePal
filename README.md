@@ -76,8 +76,8 @@ Chaque story correspond à un fichier détaillé dans `/backlog`.
 - [x] Timer simple (start, stop, reset)
 - [x] Chrono face à face (écran divisé, tap switch)
 - [x] Mode 4 joueurs (écran en 4, tap individuel)
-- [ ] Sablier (animation, rotation téléphone)
-- [ ] Marketplace timers (presets par jeu, import/export)
+- [x] Sablier (animation, rotation téléphone)
+- [x] Marketplace timers (presets par jeu, import/export)
 
 ### Score (`/backlog/score.md`)
 
