@@ -114,8 +114,8 @@ Chaque story correspond à un fichier détaillé dans `/backlog`.
 
 ### Settings (`/backlog/settings.md`)
 
-- [ ] Personnalisation thème / police / taille
-- [ ] Gestion offline (activation/désactivation, sauvegarde)
+- [x] Personnalisation thème / police / taille
+- [x] Gestion offline (activation/désactivation, sauvegarde)
 
 ---
 

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ArrowLeft, Moon, Sun, Languages, Eye, Trash2 } from 'lucide-vue-next'
+import { ArrowLeft, Moon, Sun, Languages, Eye, Trash2, Type } from 'lucide-vue-next'
 
 const { t, locale, locales } = useI18n()
 const { theme, setTheme } = useTheme()
+const { fontSize, isDyslexiaMode, setFontSize, setDyslexiaMode } = useSettings()
 
-const isDyslexiaMode = ref(false)
+type FontSize = 'small' | 'medium' | 'large'
 
 const availableLocales = computed(() => {
    return (locales.value as Array<{ code: string; name: string }>).map(l => ({
@@ -26,26 +27,13 @@ function handleClearData(): void {
    }
 }
 
+function handleFontSizeChange(size: FontSize): void {
+   setFontSize(size)
+}
+
 function toggleDyslexiaMode(): void {
-   isDyslexiaMode.value = !isDyslexiaMode.value
-   if (import.meta.client) {
-      localStorage.setItem('gamepal-dyslexia', isDyslexiaMode.value.toString())
-      applyDyslexiaMode()
-   }
+   setDyslexiaMode(!isDyslexiaMode.value)
 }
-
-function applyDyslexiaMode(): void {
-   if (import.meta.client) {
-      document.documentElement.classList.toggle('dyslexia-mode', isDyslexiaMode.value)
-   }
-}
-
-onMounted(() => {
-   if (import.meta.client) {
-      isDyslexiaMode.value = localStorage.getItem('gamepal-dyslexia') === 'true'
-      applyDyslexiaMode()
-   }
-})
 </script>
 
 <template>
@@ -106,6 +94,30 @@ onMounted(() => {
                      test-id="theme"
                      class="theme-toggle"
                      @update:model-value="setTheme($event as 'dark' | 'light')"
+                  />
+               </div>
+            </UiCard>
+
+            <UiCard class="p-4 mb-3">
+               <div class="flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
+                        <Type class="h-5 w-5" />
+                     </div>
+                     <div>
+                        <p class="font-medium">{{ t('settings.fontSize') }}</p>
+                        <p class="text-sm text-muted-foreground">{{ t('settings.fontSizeDescription') }}</p>
+                     </div>
+                  </div>
+                  <UiTabs
+                     :tabs="[
+                        { value: 'small', label: t('settings.fontSizeSmall') },
+                        { value: 'medium', label: t('settings.fontSizeMedium') },
+                        { value: 'large', label: t('settings.fontSizeLarge') },
+                     ]"
+                     :model-value="fontSize"
+                     test-id="font-size"
+                     @update:model-value="handleFontSizeChange($event as FontSize)"
                   />
                </div>
             </UiCard>

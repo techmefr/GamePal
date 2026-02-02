@@ -45,18 +45,18 @@ API :
 
 Tâches :
 
-* [ ] Choisir thème clair / sombre / auto
-* [ ] Choisir police
-* [ ] Choisir taille texte
-* [ ] Sauvegarde offline
+* [x] Choisir thème clair / sombre / auto
+* [x] Choisir police
+* [x] Choisir taille texte
+* [x] Sauvegarde offline
 
 ### Story 2 – Gestion offline
 
 Tâches :
 
-* [ ] Activer / désactiver mode offline
-* [ ] Sauvegarder préférences
-* [ ] Assurer fonctionnement complet sans réseau
+* [x] Activer / désactiver mode offline
+* [x] Sauvegarder préférences
+* [x] Assurer fonctionnement complet sans réseau
 
 ---
 
