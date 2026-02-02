@@ -28,6 +28,14 @@
             "title": "Scores",
             "description": "Track game scores"
          },
+         "time": {
+            "title": "Timer",
+            "description": "Timers and chronometers"
+         },
+         "library": {
+            "title": "Library",
+            "description": "Manage your game collection"
+         },
          "music": {
             "title": "Music",
             "description": "Ambient music for your games"
@@ -124,6 +132,76 @@
          "winner": "Winner: {name}",
          "nextRound": "Next round",
          "export": "Export results"
+      }
+   },
+   "time": {
+      "title": "Timer",
+      "modes": {
+         "simple": "Simple",
+         "faceToFace": "2P",
+         "fourPlayers": "4P"
+      },
+      "tapToStart": "Tap to start",
+      "tapToPause": "Tap to pause",
+      "tapToSwitch": "Tap to switch",
+      "reset": "Reset",
+      "duration": "Duration",
+      "timeUp": "Time's up!"
+   },
+   "library": {
+      "title": "Library",
+      "search": "Search games...",
+      "filters": "Filters",
+      "clearFilters": "Clear",
+      "all": "All",
+      "style": "Style",
+      "mood": "Mood",
+      "minPlayers": "Min players",
+      "maxPlayers": "Max players",
+      "owned": "Owned",
+      "borrowed": "Lent",
+      "forSale": "For sale",
+      "addGame": "Add game",
+      "editGame": "Edit game",
+      "gameName": "Game name",
+      "empty": "Your library is empty",
+      "addFirst": "Add your first game",
+      "noResults": "No games found",
+      "lend": "Lend",
+      "return": "Return",
+      "markForSale": "For sale",
+      "notForSale": "Not for sale",
+      "borrowerName": "Lent to...",
+      "lentTo": "Lent to {name}",
+      "deleteConfirm": "Delete {name}?",
+      "stats": {
+         "total": "Total",
+         "owned": "Owned",
+         "borrowed": "Lent",
+         "forSale": "For sale",
+         "playerRange": "Players",
+         "totalLoans": "Total loans"
+      },
+      "history": "History",
+      "loanHistory": "Loan history",
+      "ongoing": "Ongoing",
+      "styles": {
+         "strategy": "Strategy",
+         "party": "Party",
+         "family": "Family",
+         "cooperative": "Co-op",
+         "card": "Card",
+         "dice": "Dice",
+         "rpg": "RPG",
+         "trivia": "Trivia"
+      },
+      "moods": {
+         "casual": "Casual",
+         "competitive": "Competitive",
+         "relaxed": "Relaxed",
+         "intense": "Intense",
+         "funny": "Funny",
+         "serious": "Serious"
       }
    },
    "players": {

@@ -28,6 +28,14 @@
             "title": "Scores",
             "description": "Suivre les scores"
          },
+         "time": {
+            "title": "Chrono",
+            "description": "Timers et chronometres"
+         },
+         "library": {
+            "title": "Ludotheque",
+            "description": "Gerer votre collection de jeux"
+         },
          "music": {
             "title": "Musique",
             "description": "Ambiance musicale"
@@ -124,6 +132,76 @@
          "winner": "Gagnant : {name}",
          "nextRound": "Manche suivante",
          "export": "Exporter les resultats"
+      }
+   },
+   "time": {
+      "title": "Chrono",
+      "modes": {
+         "simple": "Simple",
+         "faceToFace": "2J",
+         "fourPlayers": "4J"
+      },
+      "tapToStart": "Appuyez pour demarrer",
+      "tapToPause": "Appuyez pour pause",
+      "tapToSwitch": "Appuyez pour changer",
+      "reset": "Reset",
+      "duration": "Duree",
+      "timeUp": "Temps ecoule !"
+   },
+   "library": {
+      "title": "Ludotheque",
+      "search": "Rechercher un jeu...",
+      "filters": "Filtres",
+      "clearFilters": "Effacer",
+      "all": "Tous",
+      "style": "Style",
+      "mood": "Ambiance",
+      "minPlayers": "Joueurs min",
+      "maxPlayers": "Joueurs max",
+      "owned": "Possedes",
+      "borrowed": "Pretes",
+      "forSale": "A vendre",
+      "addGame": "Ajouter un jeu",
+      "editGame": "Modifier le jeu",
+      "gameName": "Nom du jeu",
+      "empty": "Votre ludotheque est vide",
+      "addFirst": "Ajouter votre premier jeu",
+      "noResults": "Aucun jeu trouve",
+      "lend": "Preter",
+      "return": "Recuperer",
+      "markForSale": "A vendre",
+      "notForSale": "Retirer de la vente",
+      "borrowerName": "Prete a...",
+      "lentTo": "Prete a {name}",
+      "deleteConfirm": "Supprimer {name} ?",
+      "stats": {
+         "total": "Total",
+         "owned": "Possedes",
+         "borrowed": "Pretes",
+         "forSale": "A vendre",
+         "playerRange": "Joueurs",
+         "totalLoans": "Total prets"
+      },
+      "history": "Historique",
+      "loanHistory": "Historique des prets",
+      "ongoing": "En cours",
+      "styles": {
+         "strategy": "Strategie",
+         "party": "Ambiance",
+         "family": "Familial",
+         "cooperative": "Cooperatif",
+         "card": "Cartes",
+         "dice": "Des",
+         "rpg": "JDR",
+         "trivia": "Quiz"
+      },
+      "moods": {
+         "casual": "Decontracte",
+         "competitive": "Competitif",
+         "relaxed": "Relaxant",
+         "intense": "Intense",
+         "funny": "Fun",
+         "serious": "Serieux"
       }
    },
    "players": {

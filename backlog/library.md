@@ -61,26 +61,26 @@ API :
 
 Tâches :
 
-* [ ] Page liste jeux
-* [ ] Filtrage par style, ambiance, nombre de joueurs
-* [ ] Recherche texte
-* [ ] Indicateurs possédé / prêté
+* [x] Page liste jeux
+* [x] Filtrage par style, ambiance, nombre de joueurs
+* [x] Recherche texte
+* [x] Indicateurs possédé / prêté
 
 ### Story 2 – Gestion prêt / revente
 
 Tâches :
 
-* [ ] Boutons prêt / revendre
-* [ ] Historique action
-* [ ] Export JSON
+* [x] Boutons prêt / revendre
+* [x] Historique action
+* [x] Export JSON
 
 ### Story 3 – Statistiques
 
 Tâches :
 
-* [ ] Nombre de jeux
-* [ ] Nombre de joueurs max/min
-* [ ] Filtres statistiques
+* [x] Nombre de jeux
+* [x] Nombre de joueurs max/min
+* [x] Filtres statistiques
 
 ---
 

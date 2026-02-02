@@ -58,6 +58,28 @@ export interface IScorePlayer {
    total: number
 }
 
+export interface ILoanHistoryEntry {
+   id: string
+   borrower: string
+   lentAt: string
+   returnedAt: string | null
+}
+
+export interface IGame {
+   id: string
+   name: string
+   minPlayers: number
+   maxPlayers: number
+   style: string | null
+   mood: string | null
+   isOwned: boolean
+   isBorrowed: boolean
+   borrowedTo: string | null
+   forSale: boolean
+   createdAt: string
+   loanHistory: ILoanHistoryEntry[]
+}
+
 export interface IScoreSession {
    id: string
    name: string
@@ -68,4 +90,20 @@ export interface IScoreSession {
    maxRounds: number | null
    maxScore: number | null
    isTeamMode: boolean
+}
+
+export interface ITimer {
+   id: string
+   label: string
+   duration: number
+   remaining: number
+   isRunning: boolean
+   color: string
+}
+
+export interface ITimerPreset {
+   id: string
+   name: string
+   duration: number
+   game: string | null
 }
