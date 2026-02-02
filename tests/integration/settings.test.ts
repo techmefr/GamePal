@@ -37,66 +37,66 @@ describe('Settings Page', () => {
 
    it('should have appearance section', async () => {
       const wrapper = await mountSuspended(SettingsPage)
-      const sections = wrapper.findAll('.settings-section')
-      expect(sections.length).toBeGreaterThanOrEqual(1)
+      const section = wrapper.find('[data-test-id="appearance-section"]')
+      expect(section.exists()).toBe(true)
    })
 
    it('should have theme toggle buttons', async () => {
       const wrapper = await mountSuspended(SettingsPage)
-      const themeButtons = wrapper.findAll('.theme-toggle__btn')
+      const themeButtons = wrapper.findAll('[data-test-class="theme-btn"]')
       expect(themeButtons.length).toBe(2)
    })
 
    it('should have dark theme active by default', async () => {
       const wrapper = await mountSuspended(SettingsPage)
-      const activeBtn = wrapper.find('.theme-toggle__btn--active')
+      const activeBtn = wrapper.find('[data-test-id="theme-dark"][data-active="true"]')
       expect(activeBtn.exists()).toBe(true)
    })
 
    it('should have language toggle buttons', async () => {
       const wrapper = await mountSuspended(SettingsPage)
-      const localeButtons = wrapper.findAll('.locale-toggle__btn')
+      const localeButtons = wrapper.findAll('[data-test-class="locale-btn"]')
       expect(localeButtons.length).toBe(2)
    })
 
    it('should have dyslexia mode toggle', async () => {
       const wrapper = await mountSuspended(SettingsPage)
-      const toggle = wrapper.find('.toggle-switch')
+      const toggle = wrapper.find('[data-test-id="dyslexia-toggle"]')
       expect(toggle.exists()).toBe(true)
    })
 
    it('should toggle dyslexia mode', async () => {
       const wrapper = await mountSuspended(SettingsPage)
-      const toggle = wrapper.find('.toggle-switch')
+      const toggle = wrapper.find('[data-test-id="dyslexia-toggle"]')
 
-      expect(toggle.classes()).not.toContain('toggle-switch--active')
+      expect(toggle.attributes('data-active')).toBeUndefined()
       await toggle.trigger('click')
-      expect(toggle.classes()).toContain('toggle-switch--active')
+      expect(toggle.attributes('data-active')).toBe('true')
    })
 
    it('should have clear data button', async () => {
       const wrapper = await mountSuspended(SettingsPage)
-      const clearBtn = wrapper.find('.setting-item--danger')
+      const clearBtn = wrapper.find('[data-test-id="clear-data-btn"]')
       expect(clearBtn.exists()).toBe(true)
    })
 
    it('should show version in footer', async () => {
       const wrapper = await mountSuspended(SettingsPage)
-      const footer = wrapper.find('.settings-page__footer')
+      const footer = wrapper.find('[data-test-id="footer"]')
       expect(footer.text()).toContain('v1.0.0')
    })
 
    it('should have back link', async () => {
       const wrapper = await mountSuspended(SettingsPage)
-      const backLink = wrapper.find('.settings-page__back')
+      const backLink = wrapper.find('[data-test-id="back-btn"]')
       expect(backLink.exists()).toBe(true)
    })
 
    it('should switch theme when clicking light button', async () => {
       const wrapper = await mountSuspended(SettingsPage)
-      const lightBtn = wrapper.findAll('.theme-toggle__btn')[1]
+      const lightBtn = wrapper.find('[data-test-id="theme-light"]')
       await lightBtn.trigger('click')
 
-      expect(lightBtn.classes()).toContain('theme-toggle__btn--active')
+      expect(lightBtn.attributes('data-active')).toBe('true')
    })
 })

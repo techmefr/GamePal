@@ -78,6 +78,7 @@ onMounted(() => {
             <div class="flex items-center gap-4 px-4 py-4">
                 <NuxtLink
                     to="/scores"
+                    data-test-id="back-btn"
                     class="new-session__back flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                     v-motion
                     :initial="{ opacity: 0, x: -10 }"
@@ -107,6 +108,7 @@ onMounted(() => {
                 </label>
                 <UiInput
                     v-model="sessionName"
+                    data-test-id="session-name-input"
                     :placeholder="t('scores.newSession.sessionNamePlaceholder')"
                 />
             </section>
@@ -120,15 +122,17 @@ onMounted(() => {
                     {{ t('scores.newSession.players') }} ({{ selectedPlayerIds.length }})
                 </label>
 
-                <div v-if="selectedPlayers.length > 0" class="flex flex-wrap gap-2 mb-3">
+                <div v-if="selectedPlayers.length > 0" data-test-id="selected-players" class="flex flex-wrap gap-2 mb-3">
                     <UiBadge
                         v-for="player in selectedPlayers"
                         :key="player.id"
+                        data-test-class="selected-player"
                         class="selected-player flex items-center gap-1 pr-1"
                         :style="{ backgroundColor: player.color }"
                     >
                         {{ player.name }}
                         <button
+                            data-test-class="remove-player-btn"
                             class="ml-1 hover:bg-white/20 rounded-full p-0.5"
                             @click="removeSelectedPlayer(player.id)"
                         >
@@ -140,11 +144,12 @@ onMounted(() => {
                 <div class="flex gap-2 mb-3">
                     <UiInput
                         v-model="newPlayerName"
+                        data-test-id="new-player-input"
                         class="flex-1"
                         :placeholder="t('scores.newSession.newPlayerPlaceholder')"
                         @keyup.enter="handleAddNewPlayer"
                     />
-                    <UiButton @click="handleAddNewPlayer">
+                    <UiButton data-test-id="add-player-btn" @click="handleAddNewPlayer">
                         <Plus class="h-4 w-4" />
                     </UiButton>
                 </div>
@@ -188,6 +193,7 @@ onMounted(() => {
                         { value: 'teams', label: t('scores.newSession.teams') },
                     ]"
                     :model-value="isTeamMode ? 'teams' : 'individual'"
+                    test-id="game-mode"
                     @update:model-value="isTeamMode = $event === 'teams'"
                 />
             </section>
@@ -200,25 +206,27 @@ onMounted(() => {
                 <label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">
                     {{ t('scores.newSession.endCondition') }}
                 </label>
-                <div class="grid grid-cols-2 gap-3">
-                    <UiCard class="end-condition p-3">
+                <div data-test-id="end-conditions" class="grid grid-cols-2 gap-3">
+                    <UiCard data-test-id="max-rounds-card" class="end-condition p-3">
                         <span class="text-sm text-muted-foreground block mb-2">
                             {{ t('scores.newSession.maxRounds') }}
                         </span>
                         <UiInput
                             v-model.number="maxRounds"
+                            data-test-id="max-rounds-input"
                             type="number"
                             class="text-center"
                             min="1"
                             placeholder="--"
                         />
                     </UiCard>
-                    <UiCard class="end-condition p-3">
+                    <UiCard data-test-id="max-score-card" class="end-condition p-3">
                         <span class="text-sm text-muted-foreground block mb-2">
                             {{ t('scores.newSession.targetScore') }}
                         </span>
                         <UiInput
                             v-model.number="maxScore"
+                            data-test-id="max-score-input"
                             type="number"
                             class="text-center"
                             min="1"
@@ -229,6 +237,7 @@ onMounted(() => {
             </section>
 
             <UiButton
+                data-test-id="create-btn"
                 class="create-btn w-full mt-6"
                 size="lg"
                 :disabled="!canCreate"

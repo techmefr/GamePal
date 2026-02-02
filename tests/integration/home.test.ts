@@ -11,13 +11,13 @@ describe('Home Page', () => {
    it('should render all mode cards', async () => {
       const wrapper = await mountSuspended(HomePage)
       const cards = wrapper.findAll('.mode-card')
-      expect(cards.length).toBe(6)
+      expect(cards.length).toBe(8)
    })
 
-   it('should have 3 available modes', async () => {
+   it('should have 5 available modes', async () => {
       const wrapper = await mountSuspended(HomePage)
       const availableCards = wrapper.findAll('.mode-card:not(.mode-card--disabled)')
-      expect(availableCards.length).toBe(3)
+      expect(availableCards.length).toBe(5)
    })
 
    it('should have 3 disabled modes', async () => {
@@ -45,6 +45,8 @@ describe('Home Page', () => {
       const hrefs = links.map(link => link.attributes('href') || link.attributes('to'))
       expect(hrefs.some(h => h?.includes('random-picker'))).toBe(true)
       expect(hrefs.some(h => h?.includes('dice'))).toBe(true)
+      expect(hrefs.some(h => h?.includes('time'))).toBe(true)
       expect(hrefs.some(h => h?.includes('scores'))).toBe(true)
+      expect(hrefs.some(h => h?.includes('library'))).toBe(true)
    })
 })

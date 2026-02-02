@@ -27,6 +27,7 @@ function confirmDelete(id: string, name: string): void {
          <div class="flex items-center gap-4 px-4 py-4">
             <NuxtLink
                to="/"
+               data-test-id="back-btn"
                class="scores-page__back flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                v-motion
                :initial="{ opacity: 0, x: -10 }"
@@ -48,7 +49,7 @@ function confirmDelete(id: string, name: string): void {
                :initial="{ opacity: 0, scale: 0.8 }"
                :enter="{ opacity: 1, scale: 1, transition: { delay: 150 } }"
             >
-               <UiButton size="sm" class="scores-page__new">
+               <UiButton data-test-id="new-btn" size="sm" class="scores-page__new">
                   <Plus class="h-4 w-4 mr-1" />
                   {{ t('scores.new') }}
                </UiButton>
@@ -99,6 +100,7 @@ function confirmDelete(id: string, name: string): void {
 
             <div
                v-else
+               data-test-id="empty-state"
                class="scores-empty flex flex-col items-center justify-center gap-4 py-16 text-center"
                v-motion
                :initial="{ opacity: 0, y: 20 }"

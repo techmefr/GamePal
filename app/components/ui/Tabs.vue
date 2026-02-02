@@ -9,6 +9,7 @@ interface Tab {
 interface Props {
    tabs: Tab[]
    modelValue: string
+   testId?: string
 }
 
 defineProps<Props>()
@@ -27,6 +28,9 @@ function selectTab(value: string): void {
       <button
          v-for="tab in tabs"
          :key="tab.value"
+         :data-test-id="testId ? `${testId}-${tab.value}` : undefined"
+         :data-test-class="testId ? `${testId}-btn` : undefined"
+         :data-active="modelValue === tab.value ? 'true' : undefined"
          :class="cn(
             'flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all duration-200',
             modelValue === tab.value

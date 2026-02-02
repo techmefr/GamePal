@@ -236,6 +236,7 @@ onUnmounted(() => cancelSelectionTimer())
             <div class="flex items-center gap-4 px-4 py-3">
                 <NuxtLink
                     to="/"
+                    data-test-id="back-btn"
                     class="picker__back flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                 >
                     <ArrowLeft class="h-5 w-5" />
@@ -247,13 +248,14 @@ onUnmounted(() => cancelSelectionTimer())
                         { value: 'list', label: t('randomPicker.list') },
                     ]"
                     :model-value="mode"
+                    test-id="mode"
                     class="picker__mode-switch"
                     @update:model-value="switchMode($event as PickerMode)"
                 />
             </div>
         </header>
 
-        <div v-if="mode === 'touch'" class="touch-zone flex-1 relative">
+        <div v-if="mode === 'touch'" data-test-id="touch-zone" class="touch-zone flex-1 relative">
             <div
                 class="touch-area absolute inset-0 touch-none select-none"
                 @touchstart="handleTouchStart"
@@ -263,6 +265,7 @@ onUnmounted(() => cancelSelectionTimer())
             >
                 <p
                     v-if="touchPoints.length === 0"
+                    data-test-id="touch-hint"
                     class="touch-area__hint absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground text-lg text-center px-8"
                 >
                     {{ t('randomPicker.touchHint') }}
@@ -288,13 +291,14 @@ onUnmounted(() => cancelSelectionTimer())
             </p>
         </div>
 
-        <div v-else class="list-zone flex-1 p-4 flex flex-col gap-4 overflow-y-auto">
+        <div v-else data-test-id="list-zone" class="list-zone flex-1 p-4 flex flex-col gap-4 overflow-y-auto">
             <UiTabs
                 :tabs="[
                     { value: 'player', label: t('randomPicker.drawPlayer') },
                     { value: 'team', label: t('randomPicker.drawTeam') },
                 ]"
                 :model-value="drawMode"
+                test-id="draw-mode"
                 class="list-zone__draw-modes"
                 @update:model-value="drawMode = $event as DrawMode; clearResults()"
             />
@@ -302,26 +306,28 @@ onUnmounted(() => cancelSelectionTimer())
             <div class="flex gap-2">
                 <UiInput
                     v-model="newPlayerName"
+                    data-test-id="player-input"
                     :placeholder="t('randomPicker.playerName')"
                     class="list-zone__input flex-1"
                     @keyup.enter="handleAddPlayer"
                 />
-                <UiButton @click="handleAddPlayer">
+                <UiButton data-test-id="add-player-btn" @click="handleAddPlayer">
                     <Plus class="h-4 w-4" />
                     {{ t('common.add') }}
                 </UiButton>
             </div>
 
-            <div v-if="players.length > 0" class="list-zone__toolbar flex gap-2 flex-wrap">
-                <UiButton variant="outline" size="sm" @click="toggleAllPlayers(true)">
+            <div v-if="players.length > 0" data-test-id="toolbar" class="list-zone__toolbar flex gap-2 flex-wrap">
+                <UiButton data-test-id="select-all-btn" variant="outline" size="sm" @click="toggleAllPlayers(true)">
                     <CheckSquare class="h-4 w-4" />
                     {{ t('randomPicker.selectAll') }}
                 </UiButton>
-                <UiButton variant="outline" size="sm" @click="toggleAllPlayers(false)">
+                <UiButton data-test-id="deselect-all-btn" variant="outline" size="sm" @click="toggleAllPlayers(false)">
                     <Square class="h-4 w-4" />
                     {{ t('randomPicker.deselectAll') }}
                 </UiButton>
                 <UiButton
+                    data-test-id="teams-btn"
                     variant="outline"
                     size="sm"
                     class="toolbar-btn--teams ml-auto"
@@ -336,6 +342,7 @@ onUnmounted(() => cancelSelectionTimer())
             <UiCard
                 v-if="showTeamManager"
                 v-motion
+                data-test-id="team-manager"
                 :initial="{ opacity: 0, height: 0 }"
                 :enter="{ opacity: 1, height: 'auto' }"
                 class="team-manager p-4 space-y-4"
@@ -401,6 +408,8 @@ onUnmounted(() => cancelSelectionTimer())
                     v-for="(player, index) in players"
                     :key="player.id"
                     v-motion
+                    data-test-class="player-item"
+                    :data-active="isPlayerActive(player.id) ? 'true' : 'false'"
                     :initial="{ opacity: 0, x: -20 }"
                     :enter="{ opacity: 1, x: 0, transition: { delay: index * 30 } }"
                     class="player-list__item p-3"
@@ -412,6 +421,8 @@ onUnmounted(() => cancelSelectionTimer())
                     <div class="flex items-center gap-3">
                         <UiCheckbox
                             :model-value="isPlayerActive(player.id)"
+                            data-test-class="player-toggle"
+                            :data-active="isPlayerActive(player.id) ? 'true' : 'false'"
                             class="player-list__toggle"
                             @update:model-value="togglePlayerActive(player.id)"
                         />
@@ -467,12 +478,13 @@ onUnmounted(() => cancelSelectionTimer())
                 </UiCard>
             </div>
 
-            <p v-else class="list-zone__empty text-center text-muted-foreground py-8">
+            <p v-else data-test-id="empty-state" class="list-zone__empty text-center text-muted-foreground py-8">
                 {{ t('randomPicker.noPlayers') }}
             </p>
 
-            <div v-if="players.length >= 2" class="list-zone__actions flex flex-col gap-3 mt-auto pt-4">
+            <div v-if="players.length >= 2" data-test-id="action-buttons" class="list-zone__actions flex flex-col gap-3 mt-auto pt-4">
                 <UiButton
+                    data-test-id="pick-btn"
                     :disabled="isListSelecting || !canDraw"
                     class="list-zone__pick-btn w-full"
                     @click="pickRandomFromList"
@@ -481,6 +493,7 @@ onUnmounted(() => cancelSelectionTimer())
                     {{ isListSelecting ? t('randomPicker.picking') : t('randomPicker.pickRandom') }}
                 </UiButton>
                 <UiButton
+                    data-test-id="order-btn"
                     variant="outline"
                     :disabled="isListSelecting || !canDraw"
                     class="list-zone__order-btn w-full"

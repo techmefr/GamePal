@@ -54,6 +54,7 @@ onMounted(() => {
          <div class="flex items-center gap-4 px-4 py-4">
             <NuxtLink
                to="/"
+               data-test-id="back-btn"
                class="settings-page__back flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                v-motion
                :initial="{ opacity: 0, x: -10 }"
@@ -74,6 +75,7 @@ onMounted(() => {
 
       <div class="p-4 space-y-6">
          <section
+            data-test-id="appearance-section"
             class="settings-section"
             v-motion
             :initial="{ opacity: 0, y: 20 }"
@@ -101,6 +103,7 @@ onMounted(() => {
                         { value: 'light', label: t('settings.light') },
                      ]"
                      :model-value="theme"
+                     test-id="theme"
                      class="theme-toggle"
                      @update:model-value="setTheme($event as 'dark' | 'light')"
                   />
@@ -118,10 +121,13 @@ onMounted(() => {
                         <p class="text-sm text-muted-foreground">{{ t('settings.languageDescription') }}</p>
                      </div>
                   </div>
-                  <div class="locale-toggle flex gap-1 rounded-lg bg-muted p-1">
+                  <div data-test-id="locale-toggle" class="locale-toggle flex gap-1 rounded-lg bg-muted p-1">
                      <button
                         v-for="loc in availableLocales"
                         :key="loc.code"
+                        :data-test-id="`locale-${loc.code}`"
+                        data-test-class="locale-btn"
+                        :data-active="locale === loc.code ? 'true' : undefined"
                         class="locale-toggle__btn px-3 py-1.5 rounded-md text-sm font-medium transition-all"
                         :class="locale === loc.code ? 'bg-primary text-primary-foreground shadow' : 'text-muted-foreground hover:text-foreground'"
                         @click="setLocale(loc.code)"
@@ -145,6 +151,7 @@ onMounted(() => {
                   </div>
                   <UiSwitch
                      :model-value="isDyslexiaMode"
+                     data-test-id="dyslexia-toggle"
                      class="toggle-switch"
                      @update:model-value="toggleDyslexiaMode"
                   />
@@ -153,6 +160,7 @@ onMounted(() => {
          </section>
 
          <section
+            data-test-id="data-section"
             class="settings-section"
             v-motion
             :initial="{ opacity: 0, y: 20 }"
@@ -164,6 +172,7 @@ onMounted(() => {
 
             <UiCard
                hoverable
+               data-test-id="clear-data-btn"
                class="setting-item--danger p-4 cursor-pointer border-destructive/20 hover:border-destructive/50 transition-colors"
                @click="handleClearData"
             >
@@ -180,6 +189,7 @@ onMounted(() => {
          </section>
 
          <footer
+            data-test-id="footer"
             class="settings-page__footer text-center py-8 text-sm text-muted-foreground"
             v-motion
             :initial="{ opacity: 0 }"

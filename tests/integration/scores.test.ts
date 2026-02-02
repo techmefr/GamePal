@@ -36,19 +36,19 @@ describe('Scores Index Page', () => {
 
    it('should have new session button', async () => {
       const wrapper = await mountSuspended(ScoresIndexPage)
-      const newBtn = wrapper.find('.scores-page__new')
+      const newBtn = wrapper.find('[data-test-id="new-btn"]')
       expect(newBtn.exists()).toBe(true)
    })
 
    it('should show empty state when no sessions', async () => {
       const wrapper = await mountSuspended(ScoresIndexPage)
-      const empty = wrapper.find('.scores-page__empty')
+      const empty = wrapper.find('[data-test-id="empty-state"]')
       expect(empty.exists()).toBe(true)
    })
 
    it('should have back link', async () => {
       const wrapper = await mountSuspended(ScoresIndexPage)
-      const backLink = wrapper.find('.scores-page__back')
+      const backLink = wrapper.find('[data-test-id="back-btn"]')
       expect(backLink.exists()).toBe(true)
    })
 })
@@ -66,70 +66,78 @@ describe('Scores New Page', () => {
 
    it('should have session name input', async () => {
       const wrapper = await mountSuspended(ScoresNewPage)
-      const inputs = wrapper.findAll('.form-input')
-      expect(inputs.length).toBeGreaterThan(0)
+      const input = wrapper.find('[data-test-id="session-name-input"]')
+      expect(input.exists()).toBe(true)
    })
 
-   it('should have player input fields', async () => {
+   it('should have new player input', async () => {
       const wrapper = await mountSuspended(ScoresNewPage)
-      const playerFields = wrapper.findAll('.player-field')
-      expect(playerFields.length).toBe(2)
+      const input = wrapper.find('[data-test-id="new-player-input"]')
+      expect(input.exists()).toBe(true)
    })
 
    it('should have add player button', async () => {
       const wrapper = await mountSuspended(ScoresNewPage)
-      const addBtn = wrapper.find('.add-player-btn')
+      const addBtn = wrapper.find('[data-test-id="add-player-btn"]')
       expect(addBtn.exists()).toBe(true)
    })
 
-   it('should add player field when clicking add button', async () => {
+   it('should add player when clicking add button', async () => {
       const wrapper = await mountSuspended(ScoresNewPage)
-      const addBtn = wrapper.find('.add-player-btn')
+      const input = wrapper.find('[data-test-id="new-player-input"]')
+      const addBtn = wrapper.find('[data-test-id="add-player-btn"]')
+
+      await input.setValue('Alice')
       await addBtn.trigger('click')
 
-      const playerFields = wrapper.findAll('.player-field')
-      expect(playerFields.length).toBe(3)
+      const selectedPlayers = wrapper.findAll('[data-test-class="selected-player"]')
+      expect(selectedPlayers.length).toBe(1)
    })
 
    it('should have game mode toggle', async () => {
       const wrapper = await mountSuspended(ScoresNewPage)
-      const toggleButtons = wrapper.findAll('.toggle-btn')
+      const toggleButtons = wrapper.findAll('[data-test-class="game-mode-btn"]')
       expect(toggleButtons.length).toBe(2)
    })
 
    it('should have individual mode active by default', async () => {
       const wrapper = await mountSuspended(ScoresNewPage)
-      const activeBtn = wrapper.find('.toggle-btn--active')
+      const activeBtn = wrapper.find('[data-test-id="game-mode-individual"][data-active="true"]')
       expect(activeBtn.exists()).toBe(true)
    })
 
    it('should have end condition inputs', async () => {
       const wrapper = await mountSuspended(ScoresNewPage)
-      const endCondition = wrapper.find('.end-condition')
-      expect(endCondition.exists()).toBe(true)
+      const endConditions = wrapper.find('[data-test-id="end-conditions"]')
+      expect(endConditions.exists()).toBe(true)
    })
 
    it('should have create button disabled initially', async () => {
       const wrapper = await mountSuspended(ScoresNewPage)
-      const createBtn = wrapper.find('.new-session__create')
+      const createBtn = wrapper.find('[data-test-id="create-btn"]')
       expect(createBtn.attributes('disabled')).toBeDefined()
    })
 
    it('should have back link', async () => {
       const wrapper = await mountSuspended(ScoresNewPage)
-      const backLink = wrapper.find('.new-session__back')
+      const backLink = wrapper.find('[data-test-id="back-btn"]')
       expect(backLink.exists()).toBe(true)
    })
 
-   it('should remove player field when clicking remove', async () => {
+   it('should remove player when clicking remove', async () => {
       const wrapper = await mountSuspended(ScoresNewPage)
-      const addBtn = wrapper.find('.add-player-btn')
+      const input = wrapper.find('[data-test-id="new-player-input"]')
+      const addBtn = wrapper.find('[data-test-id="add-player-btn"]')
+
+      await input.setValue('Alice')
+      await addBtn.trigger('click')
+      await input.setValue('Bob')
       await addBtn.trigger('click')
 
-      const removeBtn = wrapper.find('.player-field__remove')
+      const removeBtn = wrapper.find('[data-test-class="remove-player-btn"]')
       await removeBtn.trigger('click')
 
-      const playerFields = wrapper.findAll('.player-field')
-      expect(playerFields.length).toBe(2)
+      const selectedPlayers = wrapper.findAll('[data-test-class="selected-player"]')
+      expect(selectedPlayers.length).toBe(1)
    })
 })

@@ -26,6 +26,7 @@ function toggle(currentValue: boolean): void {
       role="switch"
       :aria-checked="modelValue"
       :disabled="disabled"
+      :data-active="modelValue ? 'true' : undefined"
       :class="cn(
          'relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-all duration-300',
          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
