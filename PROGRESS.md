@@ -29,20 +29,16 @@ Dernière mise à jour : 4 février 2026
 - Clôture de partie (bouton clôturer, blocage scores)
 - Export JSON des résultats
 
+### Dice
+- Table de dés avec lancer, blocage, swipe et shake
+- Catalogue avec panier pour ajout multiple
+- Créateur de dés personnalisés (faces, couleurs, tag jeu)
+- Presets de dés
+- Export JSON et QR code
+
 ---
 
 ## Modules partiels
-
-### Dice (~70%)
-**Fait :**
-- Table de dés avec lancer
-- Blocage des dés
-- Presets de dés
-
-**Reste :**
-- Catalogue de dés (liste, panier, ajout multiples)
-- Créateur de dés personnalisés (faces, couleurs, icônes)
-- Export JSON/QR
 
 ### Players (~60%)
 **Fait :**
@@ -78,9 +74,8 @@ Dernière mise à jour : 4 février 2026
 
 ## Prochaines étapes suggérées
 
-1. **Dice** - Catalogue et créateur custom
-2. **Players** - Sessions et historique
-3. **Home** - Config auto par jeu (dépend des autres modules)
+1. **Players** - Sessions et historique
+2. **Home** - Config auto par jeu (dépend des autres modules)
 
 ---
 

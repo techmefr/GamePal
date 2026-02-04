@@ -100,7 +100,13 @@
       "faceValue": "Face value",
       "addFace": "+ Add face",
       "swipeToRoll": "Swipe up to roll",
-      "exportDie": "Export die"
+      "exportDie": "Export die",
+      "catalog": "Catalog",
+      "cart": "Cart",
+      "addToTray": "Add to tray",
+      "catalogHint": "Select dice to add",
+      "gameTag": "Game tag",
+      "gameTagPlaceholder": "Catan, Werewolf..."
    },
    "scores": {
       "title": "Scores",

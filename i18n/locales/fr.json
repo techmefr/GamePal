@@ -100,7 +100,13 @@
       "faceValue": "Valeur de la face",
       "addFace": "+ Ajouter une face",
       "swipeToRoll": "Glissez pour lancer",
-      "exportDie": "Exporter le de"
+      "exportDie": "Exporter le de",
+      "catalog": "Catalogue",
+      "cart": "Panier",
+      "addToTray": "Ajouter au plateau",
+      "catalogHint": "Selectionnez des des a ajouter",
+      "gameTag": "Jeu associe",
+      "gameTagPlaceholder": "Catane, Loup-garou..."
    },
    "scores": {
       "title": "Scores",

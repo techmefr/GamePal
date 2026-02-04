@@ -70,12 +70,12 @@ Afficher les dés actifs et permettre de les lancer.
 
 Tâches :
 
-* [ ] Composant `DiceCard.vue`
-* [ ] Bouton "Lancer"
-* [ ] Animation simple (valeurs qui changent)
-* [ ] Blocage d'un dé
-* [ ] Swipe vers le haut pour lancer
-* [ ] Shake téléphone pour lancer
+* [x] Composant `DiceCard.vue`
+* [x] Bouton "Lancer"
+* [x] Animation simple (valeurs qui changent)
+* [x] Blocage d'un dé
+* [x] Swipe vers le haut pour lancer
+* [x] Shake téléphone pour lancer
 
 Critères :
 
@@ -97,10 +97,10 @@ Ajouter rapidement plusieurs dés standards.
 
 Tâches :
 
-* [ ] Page catalogue
-* [ ] Liste des dés (d4, d6, d8, d10, d12, d20…)
-* [ ] Panier
-* [ ] Ajout multiple à la table
+* [x] Page catalogue
+* [x] Liste des dés (d4, d6, d8, d10, d12, d20…)
+* [x] Panier
+* [x] Ajout multiple à la table
 
 ---
 
@@ -111,13 +111,13 @@ Créer des dés personnalisés.
 
 Tâches :
 
-* [ ] Éditeur visuel d'une face
-* [ ] Paramétrage couleurs / icône
-* [ ] Nom du dé
-* [ ] Tag du jeu
-* [ ] Sauvegarde locale
-* [ ] Export JSON
-* [ ] Génération QR code
+* [x] Éditeur visuel d'une face
+* [x] Paramétrage couleurs / icône
+* [x] Nom du dé
+* [x] Tag du jeu
+* [x] Sauvegarde locale
+* [x] Export JSON
+* [x] Génération QR code
 
 Critères :
 

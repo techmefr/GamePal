@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, Plus, X, Dices, Package, Pencil, Trash2, Play, Lock, Unlock, Download, QrCode } from 'lucide-vue-next'
+import { ArrowLeft, Plus, X, Dices, Package, Pencil, Trash2, Play, Lock, Unlock, Download, QrCode, ShoppingCart, Minus } from 'lucide-vue-next'
 import { useDrag } from '@vueuse/gesture'
 import QRCode from 'qrcode'
 import type { IDie, ICustomDie, ICustomDieFace, IDicePreset } from '~/types'
@@ -14,9 +14,11 @@ const FACE_EMOJIS = [
    '*', '@', '#', '%', '&', '$'
 ]
 
-type ViewMode = 'roll' | 'presets' | 'createCustom' | 'createPreset'
+type ViewMode = 'roll' | 'presets' | 'createCustom' | 'createPreset' | 'catalog'
 
 const viewMode = ref<ViewMode>('roll')
+
+const cart = ref<{ type: number; count: number }[]>([])
 
 const dice = ref<IDie[]>([])
 const customDiceInTray = ref<ICustomDie[]>([])
@@ -25,8 +27,9 @@ const isRolling = ref(false)
 const { data: customDice } = useLocalStorage<ICustomDie[]>('gamepal-custom-dice', [])
 const { data: presets } = useLocalStorage<IDicePreset[]>('gamepal-dice-presets', [])
 
-const newCustomDie = ref<{ name: string; faces: ICustomDieFace[] }>({
+const newCustomDie = ref<{ name: string; game: string; faces: ICustomDieFace[] }>({
    name: '',
+   game: '',
    faces: [
       { value: '', color: null },
       { value: '', color: null },
@@ -60,6 +63,51 @@ const hasDiceInTray = computed((): boolean => {
    return dice.value.length > 0 || customDiceInTray.value.length > 0
 })
 
+const cartTotal = computed((): number => {
+   return cart.value.reduce((sum, item) => sum + item.count, 0)
+})
+
+function addToCart(type: number): void {
+   const existing = cart.value.find(item => item.type === type)
+   if (existing) {
+      existing.count++
+   } else {
+      cart.value.push({ type, count: 1 })
+   }
+}
+
+function removeFromCart(type: number): void {
+   const index = cart.value.findIndex(item => item.type === type)
+   if (index !== -1) {
+      const item = cart.value[index]
+      if (!item) return
+      if (item.count > 1) {
+         item.count--
+      } else {
+         cart.value.splice(index, 1)
+      }
+   }
+}
+
+function getCartCount(type: number): number {
+   const item = cart.value.find(i => i.type === type)
+   return item?.count ?? 0
+}
+
+function addCartToTray(): void {
+   for (const item of cart.value) {
+      for (let i = 0; i < item.count; i++) {
+         addDie(item.type)
+      }
+   }
+   cart.value = []
+   viewMode.value = 'roll'
+}
+
+function clearCart(): void {
+   cart.value = []
+}
+
 function addDie(type: number): void {
    const die: IDie = {
       id: generateId(),
@@ -84,6 +132,7 @@ function addCustomDieToTray(customDie: ICustomDie): void {
       faces: [...customDie.faces],
       currentFaceIndex: null,
       isLocked: false,
+      game: customDie.game,
    }
    customDiceInTray.value.push(dieCopy)
 }
@@ -180,6 +229,7 @@ function saveCustomDie(): void {
       faces: newCustomDie.value.faces.map(f => ({ value: f.value.trim(), color: f.color })),
       currentFaceIndex: null,
       isLocked: false,
+      game: newCustomDie.value.game.trim() || null,
    }
    customDice.value.push(die)
    resetCustomDieForm()
@@ -235,6 +285,7 @@ function closeExportModal(): void {
 function resetCustomDieForm(): void {
    newCustomDie.value = {
       name: '',
+      game: '',
       faces: [
          { value: '', color: null },
          { value: '', color: null },
@@ -364,10 +415,16 @@ function startCreatePreset(): void {
    viewMode.value = 'createPreset'
 }
 
+function openCatalog(): void {
+   clearCart()
+   viewMode.value = 'catalog'
+}
+
 function cancelForm(): void {
    viewMode.value = 'roll'
    resetCustomDieForm()
    resetPresetForm()
+   clearCart()
 }
 
 function handleDeviceMotion(event: DeviceMotionEvent): void {
@@ -479,9 +536,20 @@ onUnmounted(() => {
             :initial="{ opacity: 0, y: 20 }"
             :enter="{ opacity: 1, y: 0, transition: { delay: 200 } }"
          >
-            <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-               {{ t('dice.standardDice') }}
-            </h2>
+            <div class="flex items-center justify-between mb-3">
+               <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {{ t('dice.standardDice') }}
+               </h2>
+               <UiButton
+                  variant="ghost"
+                  size="sm"
+                  class="catalog-btn"
+                  @click="openCatalog"
+               >
+                  <ShoppingCart class="h-4 w-4 mr-1" />
+                  {{ t('dice.catalog') }}
+               </UiButton>
+            </div>
             <div class="grid grid-cols-4 gap-2">
                <UiCard
                   v-for="type in DICE_TYPES"
@@ -525,7 +593,10 @@ onUnmounted(() => {
                      <div class="flex items-center gap-2">
                         <button class="flex-1 text-left" @click="addCustomDieToTray(die)">
                            <p class="font-medium text-foreground">{{ die.name }}</p>
-                           <p class="text-xs text-muted-foreground">{{ die.faces.length }} {{ t('dice.faces') }}</p>
+                           <p class="text-xs text-muted-foreground">
+                              {{ die.faces.length }} {{ t('dice.faces') }}
+                              <span v-if="die.game" class="ml-1 text-primary">- {{ die.game }}</span>
+                           </p>
                         </button>
                         <button
                            class="custom-die-card__export p-1 text-muted-foreground hover:text-primary transition-colors"
@@ -747,6 +818,16 @@ onUnmounted(() => {
 
                <div>
                   <label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">
+                     {{ t('dice.gameTag') }}
+                  </label>
+                  <UiInput
+                     v-model="newCustomDie.game"
+                     :placeholder="t('dice.gameTagPlaceholder')"
+                  />
+               </div>
+
+               <div>
+                  <label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">
                      {{ t('dice.faces') }} ({{ newCustomDie.faces.length }})
                   </label>
 
@@ -883,6 +964,76 @@ onUnmounted(() => {
             >
                {{ t('common.save') }}
             </UiButton>
+         </section>
+      </div>
+
+      <div v-else-if="viewMode === 'catalog'" class="p-4 space-y-6">
+         <section
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 100 } }"
+         >
+            <h2 class="text-lg font-semibold text-foreground mb-6">{{ t('dice.catalog') }}</h2>
+
+            <div class="grid grid-cols-2 gap-3">
+               <UiCard
+                  v-for="type in DICE_TYPES"
+                  :key="type"
+                  class="catalog-die-card p-4"
+               >
+                  <div class="text-center mb-3">
+                     <span class="font-display text-2xl font-bold text-primary">D{{ type }}</span>
+                     <p class="text-xs text-muted-foreground mt-1">1-{{ type }}</p>
+                  </div>
+                  <div class="flex items-center justify-center gap-2">
+                     <button
+                        class="catalog-minus w-8 h-8 rounded-full bg-muted text-foreground flex items-center justify-center transition-colors"
+                        :class="getCartCount(type) > 0 ? 'hover:bg-destructive hover:text-destructive-foreground' : 'opacity-50 cursor-not-allowed'"
+                        :disabled="getCartCount(type) === 0"
+                        @click="removeFromCart(type)"
+                     >
+                        <Minus class="h-4 w-4" />
+                     </button>
+                     <span class="catalog-count w-8 text-center font-display text-lg font-semibold">
+                        {{ getCartCount(type) }}
+                     </span>
+                     <button
+                        class="catalog-plus w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/80 transition-colors"
+                        @click="addToCart(type)"
+                     >
+                        <Plus class="h-4 w-4" />
+                     </button>
+                  </div>
+               </UiCard>
+            </div>
+
+            <UiCard v-if="cartTotal > 0" class="catalog-cart mt-6 p-4">
+               <div class="flex items-center justify-between mb-3">
+                  <span class="text-sm text-muted-foreground">{{ t('dice.cart') }}</span>
+                  <button
+                     class="text-xs text-destructive hover:underline"
+                     @click="clearCart"
+                  >
+                     {{ t('common.clear') }}
+                  </button>
+               </div>
+               <div class="flex flex-wrap gap-2 mb-4">
+                  <UiBadge v-for="item in cart" :key="item.type" variant="secondary">
+                     {{ item.count }}x D{{ item.type }}
+                  </UiBadge>
+               </div>
+               <UiButton class="add-to-tray-btn w-full" @click="addCartToTray">
+                  <Plus class="h-4 w-4 mr-2" />
+                  {{ t('dice.addToTray') }} ({{ cartTotal }})
+               </UiButton>
+            </UiCard>
+
+            <p
+               v-else
+               class="text-center text-muted-foreground py-8"
+            >
+               {{ t('dice.catalogHint') }}
+            </p>
          </section>
       </div>
 

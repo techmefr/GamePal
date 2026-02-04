@@ -42,6 +42,7 @@ export interface ICustomDie {
    faces: ICustomDieFace[]
    currentFaceIndex: number | null
    isLocked: boolean
+   game: string | null
 }
 
 export interface IDicePreset {
