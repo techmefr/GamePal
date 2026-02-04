@@ -109,3 +109,12 @@ export interface ITimerPreset {
    duration: number
    game: string | null
 }
+
+export interface IGameSession {
+   id: string
+   name: string
+   playerIds: string[]
+   teamIds: string[]
+   createdAt: string
+   lastUsedAt: string
+}

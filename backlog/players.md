@@ -78,10 +78,10 @@ type Session = {
 
 Tâches :
 
-* [ ] Store players
-* [ ] PlayerCard.vue
-* [ ] PlayerForm.vue
-* [ ] Page players
+* [x] Store players
+* [x] PlayerCard.vue
+* [x] PlayerForm.vue
+* [x] Page players
 
 Critères :
 
@@ -100,10 +100,10 @@ Edge cases :
 
 Tâches :
 
-* [ ] Store sessions
-* [ ] Page sessions
-* [ ] Sélection joueurs
-* [ ] Sauvegarde / chargement
+* [x] Store sessions
+* [x] Page sessions
+* [x] Sélection joueurs
+* [x] Sauvegarde / chargement
 
 ---
 
@@ -111,7 +111,7 @@ Tâches :
 
 Tâches :
 
-* [ ] Store teams
-* [ ] UI création
-* [ ] Assignation
-* [ ] Réutilisation
+* [x] Store teams
+* [x] UI création
+* [x] Assignation
+* [x] Réutilisation

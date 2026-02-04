@@ -36,17 +36,12 @@ Dernière mise à jour : 4 février 2026
 - Presets de dés
 - Export JSON et QR code
 
----
-
-## Modules partiels
-
-### Players (~60%)
-**Fait :**
-- CRUD joueurs et équipes (via randomPicker et usePlayers/useTeams)
-
-**Reste :**
-- Gestion des sessions (création, chargement, historique)
-- Page dédiée players
+### Players
+- CRUD joueurs et équipes
+- Page dédiée avec onglets Joueurs/Équipes/Sessions
+- Sessions de jeu (création, chargement, historique)
+- Assignation joueurs aux équipes
+- Session active réutilisable
 
 ---
 
@@ -74,8 +69,8 @@ Dernière mise à jour : 4 février 2026
 
 ## Prochaines étapes suggérées
 
-1. **Players** - Sessions et historique
-2. **Home** - Config auto par jeu (dépend des autres modules)
+1. **Home** - Config auto par jeu (dépend des autres modules)
+2. **Audio** - Playlists et soundboard
 
 ---
 

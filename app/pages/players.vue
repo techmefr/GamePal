@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ArrowLeft, Plus, X, Users, User, Pencil, Check, Trash2 } from 'lucide-vue-next'
+import { ArrowLeft, Plus, X, Users, Pencil, Check, Trash2, Play, History } from 'lucide-vue-next'
 import type { IPlayer } from '~/types'
 
 const { t } = useI18n()
 const { players, addPlayer, updatePlayer, deletePlayer } = usePlayers()
 const { teams, addTeam, deleteTeam, addPlayerToTeam, removePlayerFromAllTeams, getPlayerTeam } = useTeams()
+const { sessions, currentSession, createSession, updateSession, deleteSession, loadSession, unloadSession } = useGameSessions()
 
-type ViewMode = 'players' | 'teams'
+type ViewMode = 'players' | 'teams' | 'sessions'
 
 const viewMode = ref<ViewMode>('players')
 const newPlayerName = ref('')
@@ -17,6 +18,12 @@ const editingTeamId = ref<string | null>(null)
 const editingTeamName = ref('')
 const assigningPlayerId = ref<string | null>(null)
 const showDeleteConfirm = ref<string | null>(null)
+
+const showCreateSession = ref(false)
+const newSessionName = ref('')
+const selectedPlayerIds = ref<string[]>([])
+const selectedTeamIds = ref<string[]>([])
+const editingSessionId = ref<string | null>(null)
 
 function handleAddPlayer(): void {
     const name = newPlayerName.value.trim()
@@ -102,6 +109,85 @@ function getTeamPlayersCount(teamId: string): number {
 function getUnassignedPlayers(): IPlayer[] {
     return players.value.filter(p => !getPlayerTeam(p.id))
 }
+
+function openCreateSession(): void {
+    showCreateSession.value = true
+    newSessionName.value = ''
+    selectedPlayerIds.value = []
+    selectedTeamIds.value = []
+    editingSessionId.value = null
+}
+
+function openEditSession(sessionId: string): void {
+    const session = sessions.value.find(s => s.id === sessionId)
+    if (!session) return
+
+    showCreateSession.value = true
+    newSessionName.value = session.name
+    selectedPlayerIds.value = [...session.playerIds]
+    selectedTeamIds.value = [...session.teamIds]
+    editingSessionId.value = sessionId
+}
+
+function togglePlayerInSession(playerId: string): void {
+    const index = selectedPlayerIds.value.indexOf(playerId)
+    if (index !== -1) {
+        selectedPlayerIds.value.splice(index, 1)
+    } else {
+        selectedPlayerIds.value.push(playerId)
+    }
+}
+
+function toggleTeamInSession(teamId: string): void {
+    const index = selectedTeamIds.value.indexOf(teamId)
+    if (index !== -1) {
+        selectedTeamIds.value.splice(index, 1)
+    } else {
+        selectedTeamIds.value.push(teamId)
+    }
+}
+
+function handleSaveSession(): void {
+    const name = newSessionName.value.trim()
+    if (name === '' || selectedPlayerIds.value.length === 0) return
+
+    if (editingSessionId.value) {
+        updateSession(editingSessionId.value, {
+            name,
+            playerIds: selectedPlayerIds.value,
+            teamIds: selectedTeamIds.value,
+        })
+    } else {
+        createSession(name, selectedPlayerIds.value, selectedTeamIds.value)
+    }
+    cancelCreateSession()
+}
+
+function cancelCreateSession(): void {
+    showCreateSession.value = false
+    newSessionName.value = ''
+    selectedPlayerIds.value = []
+    selectedTeamIds.value = []
+    editingSessionId.value = null
+}
+
+function handleDeleteSession(id: string): void {
+    deleteSession(id)
+    showDeleteConfirm.value = null
+}
+
+function handleLoadSession(id: string): void {
+    loadSession(id)
+}
+
+function handleUnloadSession(): void {
+    unloadSession()
+}
+
+function formatDate(dateStr: string): string {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString()
+}
 </script>
 
 <template>
@@ -133,6 +219,7 @@ function getUnassignedPlayers(): IPlayer[] {
                 :tabs="[
                     { value: 'players', label: t('players.players') },
                     { value: 'teams', label: t('players.teams') },
+                    { value: 'sessions', label: t('players.sessions'), icon: History },
                 ]"
                 :model-value="viewMode"
                 v-motion
@@ -268,7 +355,7 @@ function getUnassignedPlayers(): IPlayer[] {
                 </section>
             </div>
 
-            <div v-else>
+            <div v-else-if="viewMode === 'teams'">
                 <section
                     v-motion
                     :initial="{ opacity: 0, y: 20 }"
@@ -385,6 +472,202 @@ function getUnassignedPlayers(): IPlayer[] {
                     </div>
                 </section>
             </div>
+
+            <div v-else-if="viewMode === 'sessions'">
+                <section
+                    v-motion
+                    :initial="{ opacity: 0, y: 20 }"
+                    :enter="{ opacity: 1, y: 0, transition: { delay: 200 } }"
+                >
+                    <div v-if="currentSession" class="mb-6">
+                        <UiCard class="current-session p-4 ring-2 ring-primary">
+                            <div class="flex items-center gap-3 mb-3">
+                                <Play class="h-5 w-5 text-primary" />
+                                <span class="flex-1 font-semibold text-primary">{{ currentSession.name }}</span>
+                                <UiButton size="sm" variant="outline" @click="handleUnloadSession">
+                                    {{ t('players.endSession') }}
+                                </UiButton>
+                            </div>
+                            <div class="flex flex-wrap gap-1">
+                                <UiBadge
+                                    v-for="playerId in currentSession.playerIds"
+                                    :key="playerId"
+                                    variant="default"
+                                >
+                                    {{ players.find(p => p.id === playerId)?.name }}
+                                </UiBadge>
+                            </div>
+                        </UiCard>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                            {{ t('players.sessionHistory') }}
+                        </h2>
+                        <UiButton size="sm" @click="openCreateSession">
+                            <Plus class="h-4 w-4 mr-1" />
+                            {{ t('players.newSession') }}
+                        </UiButton>
+                    </div>
+
+                    <div v-if="sessions.length > 0" class="space-y-3">
+                        <UiCard
+                            v-for="(session, index) in sessions"
+                            :key="session.id"
+                            v-motion
+                            :initial="{ opacity: 0, x: -20 }"
+                            :enter="{ opacity: 1, x: 0, transition: { delay: 250 + index * 30 } }"
+                            class="session-card p-4"
+                            :class="{ 'opacity-50': currentSession?.id === session.id }"
+                        >
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="flex-1 font-semibold">{{ session.name }}</span>
+                                <span class="text-xs text-muted-foreground">{{ formatDate(session.lastUsedAt) }}</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <UiBadge
+                                    v-for="playerId in session.playerIds"
+                                    :key="playerId"
+                                    variant="secondary"
+                                >
+                                    {{ players.find(p => p.id === playerId)?.name ?? t('players.unknownPlayer') }}
+                                </UiBadge>
+                            </div>
+                            <div class="flex gap-2 pt-3 border-t border-border">
+                                <UiButton
+                                    v-if="currentSession?.id !== session.id"
+                                    size="sm"
+                                    class="flex-1"
+                                    @click="handleLoadSession(session.id)"
+                                >
+                                    <Play class="h-4 w-4 mr-1" />
+                                    {{ t('players.loadSession') }}
+                                </UiButton>
+                                <UiButton
+                                    variant="outline"
+                                    size="sm"
+                                    @click="openEditSession(session.id)"
+                                >
+                                    <Pencil class="h-4 w-4" />
+                                </UiButton>
+                                <UiButton
+                                    variant="outline"
+                                    size="sm"
+                                    class="text-destructive hover:text-destructive"
+                                    @click="showDeleteConfirm = session.id"
+                                >
+                                    <Trash2 class="h-4 w-4" />
+                                </UiButton>
+                            </div>
+
+                            <div
+                                v-if="showDeleteConfirm === session.id"
+                                class="flex items-center gap-2 pt-3 mt-3 border-t border-border"
+                            >
+                                <span class="flex-1 text-sm text-muted-foreground">
+                                    {{ t('players.deleteSessionConfirm', { name: session.name }) }}
+                                </span>
+                                <UiButton size="sm" variant="destructive" @click="handleDeleteSession(session.id)">
+                                    {{ t('common.delete') }}
+                                </UiButton>
+                                <UiButton size="sm" variant="ghost" @click="showDeleteConfirm = null">
+                                    {{ t('common.cancel') }}
+                                </UiButton>
+                            </div>
+                        </UiCard>
+                    </div>
+
+                    <p v-else class="text-center text-muted-foreground py-12">
+                        {{ t('players.noSessions') }}
+                    </p>
+                </section>
+            </div>
         </div>
+
+        <Teleport to="body">
+            <div
+                v-if="showCreateSession"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+                @click.self="cancelCreateSession"
+            >
+                <UiCard class="create-session-modal w-full max-w-md p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold">
+                            {{ editingSessionId ? t('players.editSession') : t('players.newSession') }}
+                        </h3>
+                        <button
+                            class="p-1 text-muted-foreground hover:text-foreground transition-colors"
+                            @click="cancelCreateSession"
+                        >
+                            <X class="h-5 w-5" />
+                        </button>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">
+                            {{ t('players.sessionName') }}
+                        </label>
+                        <UiInput
+                            v-model="newSessionName"
+                            :placeholder="t('players.sessionNamePlaceholder')"
+                        />
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">
+                            {{ t('players.selectPlayers') }} ({{ selectedPlayerIds.length }})
+                        </label>
+                        <div v-if="players.length > 0" class="flex flex-wrap gap-2">
+                            <button
+                                v-for="player in players"
+                                :key="player.id"
+                                class="px-3 py-2 rounded-lg text-sm transition-all"
+                                :class="selectedPlayerIds.includes(player.id)
+                                    ? 'bg-primary text-primary-foreground'
+                                    : 'bg-muted text-muted-foreground hover:bg-muted/80'"
+                                @click="togglePlayerInSession(player.id)"
+                            >
+                                {{ player.name }}
+                            </button>
+                        </div>
+                        <p v-else class="text-sm text-muted-foreground">
+                            {{ t('players.noPlayersToSelect') }}
+                        </p>
+                    </div>
+
+                    <div v-if="teams.length > 0">
+                        <label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">
+                            {{ t('players.selectTeams') }}
+                        </label>
+                        <div class="flex flex-wrap gap-2">
+                            <button
+                                v-for="team in teams"
+                                :key="team.id"
+                                class="px-3 py-2 rounded-lg text-sm transition-all"
+                                :class="selectedTeamIds.includes(team.id)
+                                    ? 'bg-primary text-primary-foreground'
+                                    : 'bg-muted text-muted-foreground hover:bg-muted/80'"
+                                @click="toggleTeamInSession(team.id)"
+                            >
+                                {{ team.name }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 pt-4">
+                        <UiButton
+                            class="flex-1"
+                            :disabled="!newSessionName.trim() || selectedPlayerIds.length === 0"
+                            @click="handleSaveSession"
+                        >
+                            {{ t('common.save') }}
+                        </UiButton>
+                        <UiButton variant="outline" @click="cancelCreateSession">
+                            {{ t('common.cancel') }}
+                        </UiButton>
+                    </div>
+                </UiCard>
+            </div>
+        </Teleport>
     </div>
 </template>
