@@ -90,6 +90,7 @@ export interface IScoreSession {
    maxRounds: number | null
    maxScore: number | null
    isTeamMode: boolean
+   isClosed: boolean
 }
 
 export interface ITimer {

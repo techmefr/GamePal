@@ -71,10 +71,10 @@ API :
 
 Tâches :
 
-* [ ] UI tableau des manches
-* [ ] Entrée score par joueur
-* [ ] Calcul total
-* [ ] Affichage mobile-friendly
+* [x] UI tableau des manches
+* [x] Entrée score par joueur
+* [x] Calcul total
+* [x] Affichage mobile-friendly
 
 Critères :
 
@@ -86,9 +86,9 @@ Critères :
 
 Tâches :
 
-* [ ] Bouton "Clôturer"
-* [ ] Blocage ajout de scores
-* [ ] Export JSON optionnel
+* [x] Bouton "Clôturer"
+* [x] Blocage ajout de scores
+* [x] Export JSON optionnel
 
 Edge cases :
 

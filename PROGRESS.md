@@ -1,6 +1,6 @@
 # Progression GamePal
 
-Dernière mise à jour : 2 février 2026
+Dernière mise à jour : 4 février 2026
 
 ---
 
@@ -24,17 +24,14 @@ Dernière mise à jour : 2 février 2026
 - Mode dyslexie
 - Fonctionnement offline via localStorage
 
+### Score
+- Notation par manche (saisie, total, affichage)
+- Clôture de partie (bouton clôturer, blocage scores)
+- Export JSON des résultats
+
 ---
 
 ## Modules partiels
-
-### Score (~50%)
-**Fait :**
-- Notation par manche (saisie, total, affichage)
-
-**Reste :**
-- Clôture de partie (bouton clôture)
-- Export JSON des résultats
 
 ### Dice (~70%)
 **Fait :**
@@ -81,10 +78,9 @@ Dernière mise à jour : 2 février 2026
 
 ## Prochaines étapes suggérées
 
-1. **Score** - Finir clôture/export (rapide à faire)
-2. **Dice** - Catalogue et créateur custom
-3. **Players** - Sessions et historique
-4. **Home** - Config auto par jeu (dépend des autres modules)
+1. **Dice** - Catalogue et créateur custom
+2. **Players** - Sessions et historique
+3. **Home** - Config auto par jeu (dépend des autres modules)
 
 ---
 

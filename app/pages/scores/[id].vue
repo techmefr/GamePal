@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ArrowLeft, Trophy, Minus, Plus, ChevronRight, Download } from 'lucide-vue-next'
+import { ArrowLeft, Trophy, Minus, Plus, ChevronRight, Download, Lock } from 'lucide-vue-next'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { getSession, updatePlayerScore, addRound, sessions } = useScoreSessions()
+const { getSession, updatePlayerScore, addRound, closeSession, sessions } = useScoreSessions()
 
 const sessionId = computed(() => route.params.id as string)
 const session = computed(() => getSession(sessionId.value))
@@ -17,6 +17,10 @@ const sortedPlayers = computed(() => {
 const isGameOver = computed(() => {
    if (!session.value) return false
 
+   if (session.value.isClosed) {
+      return true
+   }
+
    if (session.value.maxRounds && session.value.currentRound > session.value.maxRounds) {
       return true
    }
@@ -27,6 +31,15 @@ const isGameOver = computed(() => {
 
    return false
 })
+
+const canClose = computed(() => {
+   if (!session.value) return false
+   return !isGameOver.value && session.value.players.some(p => p.total !== 0)
+})
+
+function handleCloseSession(): void {
+   closeSession(sessionId.value)
+}
 
 function handleScoreChange(playerId: string, round: number, event: Event): void {
    const input = event.target as HTMLInputElement
@@ -185,19 +198,24 @@ onMounted(() => {
                   <span class="player-name flex-1 font-medium text-foreground">{{ player.name }}</span>
                   <div class="score-controls flex items-center gap-1">
                      <button
-                        class="score-btn w-9 h-9 rounded-lg bg-muted text-foreground flex items-center justify-center hover:bg-muted/80 active:bg-primary active:text-primary-foreground transition-colors"
+                        class="score-btn w-9 h-9 rounded-lg bg-muted text-foreground flex items-center justify-center transition-colors"
+                        :class="isGameOver ? 'opacity-50 cursor-not-allowed' : 'hover:bg-muted/80 active:bg-primary active:text-primary-foreground'"
+                        :disabled="isGameOver"
                         @click="updatePlayerScore(sessionId, player.id, session.currentRound, getPlayerScore(player.id, session.currentRound) - 1)"
                      >
                         <Minus class="h-4 w-4" />
                      </button>
                      <input
                         type="number"
-                        class="score-input w-14 h-9 text-center rounded-lg border border-border bg-background text-foreground font-display font-medium focus:outline-none focus:ring-2 focus:ring-primary"
+                        class="score-input w-14 h-9 text-center rounded-lg border border-border bg-background text-foreground font-display font-medium focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
                         :value="getPlayerScore(player.id, session.currentRound)"
+                        :disabled="isGameOver"
                         @change="handleScoreChange(player.id, session.currentRound, $event)"
                      />
                      <button
-                        class="score-btn w-9 h-9 rounded-lg bg-muted text-foreground flex items-center justify-center hover:bg-muted/80 active:bg-primary active:text-primary-foreground transition-colors"
+                        class="score-btn w-9 h-9 rounded-lg bg-muted text-foreground flex items-center justify-center transition-colors"
+                        :class="isGameOver ? 'opacity-50 cursor-not-allowed' : 'hover:bg-muted/80 active:bg-primary active:text-primary-foreground'"
+                        :disabled="isGameOver"
                         @click="updatePlayerScore(sessionId, player.id, session.currentRound, getPlayerScore(player.id, session.currentRound) + 1)"
                      >
                         <Plus class="h-4 w-4" />
@@ -210,18 +228,31 @@ onMounted(() => {
             </div>
          </section>
 
-         <UiButton
+         <div
             v-if="!isGameOver"
-            class="next-round-btn w-full"
-            size="lg"
+            class="flex gap-3"
             v-motion
             :initial="{ opacity: 0, y: 20 }"
             :enter="{ opacity: 1, y: 0, transition: { delay: 400 } }"
-            @click="handleAddRound"
          >
-            {{ t('scores.session.nextRound') }}
-            <ChevronRight class="h-5 w-5 ml-1" />
-         </UiButton>
+            <UiButton
+               class="next-round-btn flex-1"
+               size="lg"
+               @click="handleAddRound"
+            >
+               {{ t('scores.session.nextRound') }}
+               <ChevronRight class="h-5 w-5 ml-1" />
+            </UiButton>
+            <UiButton
+               v-if="canClose"
+               class="close-session-btn"
+               size="lg"
+               variant="secondary"
+               @click="handleCloseSession"
+            >
+               <Lock class="h-5 w-5" />
+            </UiButton>
+         </div>
       </div>
 
       <div v-else class="flex items-center justify-center min-h-[50vh]">

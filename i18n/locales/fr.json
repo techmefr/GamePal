@@ -131,7 +131,8 @@
          "gameOver": "Partie terminee",
          "winner": "Gagnant : {name}",
          "nextRound": "Manche suivante",
-         "export": "Exporter les resultats"
+         "export": "Exporter les resultats",
+         "close": "Cloturer"
       }
    },
    "time": {

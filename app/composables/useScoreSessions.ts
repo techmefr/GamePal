@@ -53,6 +53,7 @@ export function useScoreSessions() {
          maxRounds: options.maxRounds,
          maxScore: options.maxScore,
          isTeamMode: options.isTeamMode,
+         isClosed: false,
       }
 
       sessions.value.unshift(session)
@@ -98,6 +99,15 @@ export function useScoreSessions() {
       }
    }
 
+   function closeSession(sessionId: string): void {
+      const session = sessions.value.find(s => s.id === sessionId)
+      if (!session) return
+
+      session.isClosed = true
+      session.updatedAt = new Date().toISOString()
+      save()
+   }
+
    function setCurrentSession(session: IScoreSession | null): void {
       currentSession.value = session
    }
@@ -113,6 +123,7 @@ export function useScoreSessions() {
       updatePlayerScore,
       addRound,
       deleteSession,
+      closeSession,
       setCurrentSession,
    }
 }

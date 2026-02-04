@@ -131,7 +131,8 @@
          "gameOver": "Game Over",
          "winner": "Winner: {name}",
          "nextRound": "Next round",
-         "export": "Export results"
+         "export": "Export results",
+         "close": "Close game"
       }
    },
    "time": {
