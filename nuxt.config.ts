@@ -5,6 +5,8 @@ export default defineNuxtConfig({
 
    devtools: { enabled: true },
 
+   ssr: false,
+
    modules: ['@nuxt/eslint', '@nuxtjs/i18n', '@vueuse/motion/nuxt'],
 
    i18n: {
@@ -36,12 +38,14 @@ export default defineNuxtConfig({
    ],
 
    nitro: {
+      preset: 'github-pages',
       output: {
          publicDir: 'docs',
       },
    },
 
    app: {
+      baseURL: '/GamePal/',
       head: {
          title: 'Gamepal',
          meta: [
