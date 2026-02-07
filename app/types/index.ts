@@ -118,3 +118,13 @@ export interface IGameSession {
    createdAt: string
    lastUsedAt: string
 }
+
+export interface IGameConfig {
+   id: string
+   gameId: string | null
+   gameName: string
+   dicePresetId: string | null
+   timerPresetId: string | null
+   createdAt: string
+   updatedAt: string
+}

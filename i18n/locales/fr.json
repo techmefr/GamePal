@@ -12,9 +12,24 @@
       "save": "Enregistrer",
       "loading": "Chargement...",
       "comingSoon": "Bientot disponible",
-      "close": "Fermer"
+      "close": "Fermer",
+      "none": "Aucun"
    },
    "home": {
+      "selectGame": "Choisir un jeu",
+      "manualConfig": "Manuel",
+      "endGame": "Terminer",
+      "recentGames": "Jeux recents",
+      "searchGame": "Rechercher un jeu...",
+      "players": "joueurs",
+      "noGamesInLibrary": "Aucun jeu dans votre ludotheque",
+      "noGamesFound": "Aucun jeu trouve",
+      "editConfig": "Modifier la configuration",
+      "newConfig": "Nouvelle configuration",
+      "gameName": "Nom du jeu",
+      "gameNamePlaceholder": "Catane, Monopoly...",
+      "dicePreset": "Lot de des",
+      "timerPreset": "Preset chrono",
       "modes": {
          "randomPicker": {
             "title": "Tirage au sort",

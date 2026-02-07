@@ -3,13 +3,13 @@
 ## Contexte
 
 Page d'accueil et lancement intelligent des jeux.
-Doit centraliser toutes les fonctionnalités préconfigurées par jeu.
+Doit centraliser toutes les fonctionnalites preconfigurees par jeu.
 
 Fonctionnement :
 - offline-first
-- détecte jeu sélectionné
-- charge dés, temps, scores, audio
-- possibilité de config manuelle
+- detecte jeu selectionne
+- charge des, temps, scores, audio
+- possibilite de config manuelle
 
 ---
 
@@ -17,39 +17,40 @@ Fonctionnement :
 
 ### Story 1 – Choix du jeu
 
-Tâches :
+Taches :
 
-* [ ] UI liste des jeux disponibles
-* [ ] Recherche par nom, style, nombre de joueurs
-* [ ] Sélection jeu → charge automatique des paramètres
+* [x] UI liste des jeux disponibles
+* [x] Recherche par nom, style, nombre de joueurs
+* [x] Selection jeu → charge automatique des parametres
 
 ### Story 2 – Chargement automatique
 
-Tâches :
+Taches :
 
-* [ ] Récupérer dés associés
-* [ ] Récupérer timers et sablier
-* [ ] Récupérer scores
-* [ ] Récupérer playlist audio
+* [x] Recuperer des associes (dice presets)
+* [x] Recuperer timers (timer presets)
+* [ ] Recuperer scores (a faire)
+* [ ] Recuperer playlist audio (a faire)
 
-Critères :
+Criteres :
 
-* tout est chargé correctement pour le jeu
-* aucun paramètre manquant
+* tout est charge correctement pour le jeu
+* aucun parametre manquant
 * interface lisible sur mobile
 
 ### Story 3 – Mode configuration manuelle
 
-Tâches :
+Taches :
 
-* [ ] Bouton config manuelle
-* [ ] Choisir dés, temps, score, audio
-* [ ] Sauvegarde pour usage futur
+* [x] Bouton config manuelle
+* [x] Choisir des, temps
+* [x] Sauvegarde pour usage futur
+* [x] Jeux recents affichables
 
 ---
 
 ## Notes produit
 
-* prioriser simplicité et rapidité
+* prioriser simplicite et rapidite
 * feedback visuel clair lors du chargement
 * support offline complet

@@ -12,9 +12,24 @@
       "save": "Save",
       "loading": "Loading...",
       "comingSoon": "Coming soon",
-      "close": "Close"
+      "close": "Close",
+      "none": "None"
    },
    "home": {
+      "selectGame": "Select a game",
+      "manualConfig": "Manual",
+      "endGame": "End",
+      "recentGames": "Recent games",
+      "searchGame": "Search a game...",
+      "players": "players",
+      "noGamesInLibrary": "No games in your library",
+      "noGamesFound": "No games found",
+      "editConfig": "Edit configuration",
+      "newConfig": "New configuration",
+      "gameName": "Game name",
+      "gameNamePlaceholder": "Catan, Monopoly...",
+      "dicePreset": "Dice preset",
+      "timerPreset": "Timer preset",
       "modes": {
          "randomPicker": {
             "title": "Random Picker",

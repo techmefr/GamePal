@@ -1,76 +1,78 @@
 # Progression GamePal
 
-Dernière mise à jour : 4 février 2026
+Derniere mise a jour : 7 fevrier 2026
 
 ---
 
-## Modules terminés (100%)
+## Modules termines (100%)
 
 ### Time
 - Timer simple (start, stop, reset)
-- Chrono face-à-face (2 joueurs, écran divisé)
-- Mode 4 joueurs (écran en 4 zones)
+- Chrono face-a-face (2 joueurs, ecran divise)
+- Mode 4 joueurs (ecran en 4 zones)
 - Sablier avec animation SVG et flip
 - Marketplace presets (builtin + custom + import/export JSON)
 
 ### Library
 - Liste et filtres des jeux (style, ambiance, nombre joueurs)
-- Gestion prêt/revente avec historique
-- Statistiques (total, prêtés, à vendre)
+- Gestion pret/revente avec historique
+- Statistiques (total, pretes, a vendre)
 
 ### Settings
-- Thème dark/light
+- Theme dark/light
 - Taille de texte (S/M/L)
 - Mode dyslexie
 - Fonctionnement offline via localStorage
 
 ### Score
 - Notation par manche (saisie, total, affichage)
-- Clôture de partie (bouton clôturer, blocage scores)
-- Export JSON des résultats
+- Cloture de partie (bouton cloturer, blocage scores)
+- Export JSON des resultats
 
 ### Dice
-- Table de dés avec lancer, blocage, swipe et shake
+- Table de des avec lancer, blocage, swipe et shake
 - Catalogue avec panier pour ajout multiple
-- Créateur de dés personnalisés (faces, couleurs, tag jeu)
-- Presets de dés
+- Createur de des personnalises (faces, couleurs, tag jeu)
+- Presets de des
 - Export JSON et QR code
 
 ### Players
-- CRUD joueurs et équipes
-- Page dédiée avec onglets Joueurs/Équipes/Sessions
-- Sessions de jeu (création, chargement, historique)
-- Assignation joueurs aux équipes
-- Session active réutilisable
+- CRUD joueurs et equipes
+- Page dediee avec onglets Joueurs/Equipes/Sessions
+- Sessions de jeu (creation, chargement, historique)
+- Assignation joueurs aux equipes
+- Session active reutilisable
+
+### Home
+- Selection de jeu depuis la bibliotheque
+- Recherche par nom, style, ambiance
+- Configuration manuelle (nom, preset des, preset timer)
+- Activation/desactivation de configuration
+- Jeux recents accessibles
 
 ---
 
-## Modules non commencés (0%)
-
-### Home
-- Choix du jeu (recherche, filtre, sélection)
-- Chargement automatique (dés, temps, score, audio)
-- Configuration manuelle (modification, sauvegarde)
+## Modules non commences (0%)
 
 ### Audio
 - Playlists (musiques libres, YouTube embed, partage)
 - Soundboard (sons rapides, volume individuel, multi-touch)
 
 ### Rules
-- Gestion des règles (ajout/modif/suppression, mode 2 minutes)
+- Gestion des regles (ajout/modif/suppression, mode 2 minutes)
 - TTS (lecture audio, vitesse/voix)
-- IA d'aide (reformulation, questions/réponses)
+- IA d'aide (reformulation, questions/reponses)
 
 ### Narrator
-- Pré-scripter (création et édition de scripts, notes)
+- Pre-scripter (creation et edition de scripts, notes)
 - IA narrateur (prompts, TTS, marketplace)
 
 ---
 
-## Prochaines étapes suggérées
+## Prochaines etapes suggerees
 
-1. **Home** - Config auto par jeu (dépend des autres modules)
-2. **Audio** - Playlists et soundboard
+1. **Audio** - Playlists et soundboard
+2. **Rules** - Gestion des regles de jeu
 
 ---
 
