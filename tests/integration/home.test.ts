@@ -14,22 +14,22 @@ describe('Home Page', () => {
       expect(cards.length).toBe(8)
    })
 
-   it('should have 5 available modes', async () => {
+   it('should have 6 available modes', async () => {
       const wrapper = await mountSuspended(HomePage)
       const availableCards = wrapper.findAll('.mode-card:not(.mode-card--disabled)')
-      expect(availableCards.length).toBe(5)
+      expect(availableCards.length).toBe(6)
    })
 
-   it('should have 3 disabled modes', async () => {
+   it('should have 2 disabled modes', async () => {
       const wrapper = await mountSuspended(HomePage)
       const disabledCards = wrapper.findAll('.mode-card--disabled')
-      expect(disabledCards.length).toBe(3)
+      expect(disabledCards.length).toBe(2)
    })
 
    it('should show coming soon badge on disabled modes', async () => {
       const wrapper = await mountSuspended(HomePage)
       const badges = wrapper.findAll('.mode-card__badge')
-      expect(badges.length).toBe(3)
+      expect(badges.length).toBe(2)
    })
 
    it('should have link to settings', async () => {

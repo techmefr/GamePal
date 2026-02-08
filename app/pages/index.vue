@@ -70,7 +70,7 @@ const modes: IGameMode[] = [
         titleKey: 'home.modes.rules.title',
         descriptionKey: 'home.modes.rules.description',
         route: '/rules',
-        enabled: false,
+        enabled: true,
         icon: '📖',
     },
     {

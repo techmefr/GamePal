@@ -1,1 +1,0 @@
-import{c as e}from"./Dn2euNds.js";const c=e("lock",[["rect",{width:"18",height:"11",x:"3",y:"11",rx:"2",ry:"2",key:"1w4ew1"}],["path",{d:"M7 11V7a5 5 0 0 1 10 0v4",key:"fwvmzm"}]]);const a=e("minus",[["path",{d:"M5 12h14",key:"1ays0h"}]]);export{c as L,a as M};

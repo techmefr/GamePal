@@ -128,3 +128,28 @@ export interface IGameConfig {
    createdAt: string
    updatedAt: string
 }
+
+export type RuleSource = 'manual' | 'ocr' | 'ai'
+
+export interface IRule {
+   id: string
+   game: string
+   title: string
+   content: string
+   source: RuleSource
+   createdAt: string
+   updatedAt: string
+}
+
+export type AIProvider = 'openai' | 'anthropic'
+
+export interface IAIConfig {
+   provider: AIProvider
+   openaiKey: string | null
+   anthropicKey: string | null
+}
+
+export interface IAIMessage {
+   role: 'user' | 'assistant' | 'system'
+   content: string
+}
